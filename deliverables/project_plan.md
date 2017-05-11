@@ -33,6 +33,5 @@ After studying the existing algorithms, we chose to program a linear regression 
 7. Project demonstration.
 
 ## Schedule
-
-First week (W1): 4/26/2017. 
-Last week (W10): 7/5/2017.
+- First week (W1): 4/26/2017. 
+- Last week (W10): 7/5/2017.
