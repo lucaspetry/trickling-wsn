@@ -12,6 +12,7 @@ public:
   ~LinearPredictor() { }
   
   Type predictNext(Type lastValue) {
+    return 0; // TODO
   }
   
 };
