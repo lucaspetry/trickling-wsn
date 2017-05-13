@@ -6,7 +6,9 @@ Our goal is to implement a **dynamic** linear regression predictor with gradient
 `void Smart_Data::broadcast() { notify(); }`
 
 The **PredictiveSmartData** will overwrite this method, verifying with the predictors if observers should be notified (and the data transmitted). The simplified class diagram below summarizes the new classes and modifications to [SmartData](http://epos.lisha.ufsc.br/EPOS+2+User+Guide#Smart_Data) that are being proposed.
-![Class Diagram](https://github.com/lucaspetry/trickling-wsn/tree/master/deliverables/d2/class_diagram.png)
+
+<img src="https://github.com/lucaspetry/trickling-wsn/blob/master/deliverables/d2/class_diagram.png" data-canonical-src="https://github.com/lucaspetry/trickling-wsn/blob/master/deliverables/d2/class_diagram.png" width="603" height="476" />
+
 Whenever a **PredictiveSmartData** is instantiated, the set operation mode will always be `ADVERTISED`, given that we're only interested in sensors being monitored by the gateway. The *errorMargin* is a user-defined parameter in **PredictiveSmartData**, meaning how acceptable a predicted value *y* is, given the value *x* read from the sensor. *y* is acceptable if it lies between *x - errorMargin* and *x + errorMargin*. The predictor-specific parameters are described as follows.
 
 ### Linear Regression Predictor Parameters
