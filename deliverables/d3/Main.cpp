@@ -41,11 +41,11 @@ void testTriangularFunction(Predictor<double>* predictor) {
 }
 
 int main() {
-  Predictor<double>* predictor = new LinearPredictor<double>();
+  Predictor<double>* predictor = new LinearPredictor<double, 20>();
   testLinearFunction(predictor);
   
   delete predictor;
-  predictor = new LinearPredictor<double>();
+  predictor = new LinearPredictor<double, 20>();
   testTriangularFunction(predictor);
   
   return 0;

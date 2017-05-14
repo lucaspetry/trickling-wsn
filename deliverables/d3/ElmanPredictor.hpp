@@ -3,11 +3,20 @@
 
 #include "Predictor.hpp"
 
-template<class Type>
+template<class Type, unsigned int HIDDEN_UNITS>
 class ElmanPredictor : public Predictor<Type> {
 
+private:
+  float _wInputLayer[HIDDEN_UNITS + 1];
+  float _wHiddenLayer[HIDDEN_UNITS];
+  float _wOutputLayer;
+
 public:
-  ElmanPredictor() { }
+  ElmanPredictor(float wInputLayer[HIDDEN_UNITS + 1], float wHiddenLayer[HIDDEN_UNITS], float wOutputLayer) {
+    _wInputLayer = wInputLayer;
+    _wHiddenLayer = wHiddenLayer;
+    _wOutputLayer = wOutputLayer;
+  }
   
   ~ElmanPredictor() { }
   
