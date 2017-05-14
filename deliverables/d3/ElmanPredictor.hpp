@@ -3,7 +3,7 @@
 
 #include "Predictor.hpp"
 
-template<class Type, unsigned int HIDDEN_UNITS>
+template<class Type, unsigned short HIDDEN_UNITS>
 class ElmanPredictor : public Predictor<Type> {
 
 private:

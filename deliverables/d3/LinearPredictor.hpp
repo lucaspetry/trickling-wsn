@@ -4,7 +4,7 @@
 #include "Predictor.hpp"
 #include <iostream>
 
-template<class Type, unsigned int DATA_POINTS>
+template<class Type, unsigned short DATA_POINTS>
 class LinearPredictor : public Predictor<Type> {
 
 private:
