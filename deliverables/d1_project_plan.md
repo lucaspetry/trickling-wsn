@@ -35,3 +35,13 @@ After studying the existing algorithms, we chose to program a linear regression 
 ## Schedule
 - First week (W1): 4/26/2017. 
 - Last week (W10): 7/5/2017.
+
+| Task                                                                                                                          | W1 | W2 | W3 | W4 | W5 | W6 | W7 | W8 | W9 | W10 |
+|:-------------------------------------------------------------------------------------------------------------------------------|:--:|:--:|:--:|:--:|:--:|:--:|----|----|----|:---:|
+| 1. Make project plan                                                                                                          |  X | D1 |    |    |    |    |    |    |    |     |
+| 2. Study system restrictions and limitations of EPOSMote III and elaborate implementation strategies, such as design patterns |    |  X | D2 |    |    |    |    |    |    |     |
+| 3. Code and test the chosen prediction algorithms in C++ for a general purpose operating system                               |    |    |  X | D3 |    |    |    |    |    |     |
+| 4. Code and test the linear regression with gradient descent predictor on EPOS                                                |    |    |    |  X |  X | D4 |    |    |    |     |
+| 5. Code and test the Elman neural network predictor on EPOS                                                                   |    |    |    |    |    |  X | X  | D5 |    |     |
+| 6. Deploy the final product using the UFSC IoT Gateway                                                                        |    |    |    |    |    |    |    | X  | X  |  D6 |
+| 7. Present the final project and results                                                                                      |    |    |    |    |    |    |    |    |    |  D7 |
