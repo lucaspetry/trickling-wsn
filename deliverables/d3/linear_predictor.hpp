@@ -1,7 +1,7 @@
 #ifndef LINEAR_PREDICTOR_HPP_
 #define LINEAR_PREDICTOR_HPP_
 
-#include "Predictor.hpp"
+#include "predictor.hpp"
 
 template<class Type, unsigned short DATA_POINTS>
 class LinearPredictor : public Predictor<Type> {

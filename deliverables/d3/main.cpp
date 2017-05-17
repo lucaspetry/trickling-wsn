@@ -1,5 +1,5 @@
-#include "ElmanPredictor.hpp"
-#include "LinearPredictor.hpp"
+#include "elman_predictor.hpp"
+#include "linear_predictor.hpp"
 #include <iostream>
 
 double linearFunction(double m, double b, int t) {
