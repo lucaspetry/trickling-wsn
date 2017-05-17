@@ -2,7 +2,6 @@
 #define LINEAR_PREDICTOR_HPP_
 
 #include "Predictor.hpp"
-#include <iostream>
 
 template<class Type, unsigned short DATA_POINTS>
 class LinearPredictor : public Predictor<Type> {
@@ -14,6 +13,7 @@ private:
   short _gradientIterations;
   float _m;
   float _b;
+  unsigned long _t;
 
 public:
   LinearPredictor(float learningRate = 0.001, short gradientIterations = 1000, float m = 0, float b = 0) {
@@ -22,17 +22,19 @@ public:
     _gradientIterations = gradientIterations;
     _m = m;
     _b = b;
+    _t = 0;
   }
   
   ~LinearPredictor() { }
   
   Type predictNext(Type lastValue) {
-    Type nextValue = _m * lastValue + _b;
+    Type nextValue = _m * _t + _b;
 
-    addLastValue(lastValue);    
+    addLastValue(lastValue);  
     updateCoefficients();
-    
-    return nextValue;    
+    _t++;
+        
+    return nextValue;
   }
   
 protected:
@@ -58,21 +60,20 @@ protected:
       float m_gradient = 0;
      
       for(int j = 0; j < _currentIndex; j++) {
-        int x = j+1;
+        int x = _t - _currentIndex + j;
         float y = _dataWindow[j];
 
-        b_gradient += -(2.0/N) * (y - ((m * x) + b));
         m_gradient += -(2.0/N) * x * (y - ((m * x) + b));
+        b_gradient += -(2.0/N) * (y - ((m * x) + b));
+        
       }
 
-      b = b - (_learningRate * b_gradient);
       m = m - (_learningRate * m_gradient);
+      b = b - (_learningRate * b_gradient);
     }
 
     _b = b;
     _m = m;
-
-    std::cout << "New function:\ny = " << _m << "x + " << _b << std::endl;
   }  
 };
 

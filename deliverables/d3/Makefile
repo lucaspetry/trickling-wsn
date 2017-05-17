@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -fcxx-exceptions -Wno-deprecated-register -Wall
+CFLAGS = -std=c++11 -fcxx-exceptions -Wno-deprecated-register -g -Wall
 EXECUTABLE = test
 
 SRC_FILES += $(wildcard *.cpp)
