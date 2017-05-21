@@ -3,11 +3,12 @@
 
 #include "predictor.hpp"
 
-template<class Type, unsigned short DATA_POINTS>
+template<class Type>
 class LinearPredictor : public Predictor<Type> {
 
 private:
-  Type _dataWindow[DATA_POINTS];
+  Type *_dataWindow;
+  unsigned int _dataPoints;
   unsigned int _currentIndex;
   float _learningRate;
   short _gradientIterations;
@@ -16,7 +17,9 @@ private:
   unsigned long _t;
 
 public:
-  LinearPredictor(float learningRate = 0.001, short gradientIterations = 1000, float m = 0, float b = 0) {
+  LinearPredictor(unsigned int dataPoints = 50, float learningRate = 0.001, short gradientIterations = 1000, float m = 0, float b = 0) {
+    _dataPoints = dataPoints;
+    _dataWindow = new Type[dataPoints];
     _currentIndex = 0;
     _learningRate = learningRate;
     _gradientIterations = gradientIterations;
@@ -30,7 +33,7 @@ public:
   Type predictNext(Type lastValue) {
     Type nextValue = _m * _t + _b;
 
-    addLastValue(lastValue);  
+    addLastValue(lastValue);    
     updateCoefficients();
     _t++;
         
@@ -39,11 +42,11 @@ public:
   
 protected:
   void addLastValue(Type lastValue) {
-    if(_currentIndex >= DATA_POINTS) {
-      for(unsigned int i = 1; i < DATA_POINTS; i++)
+    if(_currentIndex >= _dataPoints) {
+      for(unsigned int i = 1; i < _dataPoints; i++)
         _dataWindow[i - 1] = _dataWindow[i];
       
-      _currentIndex = DATA_POINTS - 1;
+      _currentIndex = _dataPoints - 1;
     }
    
     _dataWindow[_currentIndex++] = lastValue;

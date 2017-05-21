@@ -1,0 +1,10 @@
+========================================================================
+Data Information
+========================================================================
+What:		Hourly Air Temperature
+Unit:		Degrees Celsius
+Where:		San Francisco International Airport
+When:		Jan 1st, 2015 to Dec 31st, 2016
+Source:		NOAA Satellite and Information Service
+		(U.S. National Climatic Data Center)
+URL:		https://www7.ncdc.noaa.gov/CDO/cdopoemain.cmd?datasetabbv=DS3505&countryabbv=&georegionabbv=&resolution=40

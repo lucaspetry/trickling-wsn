@@ -1,0 +1,7 @@
+==================================================
+README
+==================================================
+make all	Compiles both predictors
+make linear	Compiles linear predictor
+make elman	Compiles elmanan predictor
+make clean	Clean all executables
