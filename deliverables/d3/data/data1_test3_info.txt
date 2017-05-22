@@ -1,4 +1,4 @@
-./test -in data/data1.dat -out data/data1_results.txt -margin 0.05 -window 30 -lrate 0.000000001 -i 200 -m 0 -b 0
+./linear -in data/data1.dat -out data/data1_results.txt -margin 0.05 -window 30 -lrate 0.000000001 -i 200 -m 0 -b 0
 
 Test Parameters:
 > Input File:        data/data1.dat
