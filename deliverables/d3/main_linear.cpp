@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
   while(getline(input, line)) {
     float dataPoint = strtof(line.c_str(), 0);
     float predicted = predictor->predictNext(lastValue);
-    double difference = abs(dataPoint - predicted);
+    double difference = fabs(dataPoint - predicted);
     float margin = dataPoint * accMargin;
     unsigned int hit = (predicted >= dataPoint - margin && predicted <= dataPoint + margin) ? 1 : 0;
     
