@@ -1,8 +1,9 @@
 #include "linear_predictor.hpp"
-#include <string>
-#include <iostream>
-#include <stdlib.h>
 #include <fstream>
+#include <iostream>
+#include <math.h>
+#include <stdlib.h>
+#include <string>
 
 void printUsage() {
   std::cout << "  Usage is:" << std::endl;
@@ -92,16 +93,18 @@ int main(int argc, char* argv[]) {
   std::cout << "\nRunning predictor... ";
   std::cout.flush();
   
-  output << "data_point,predicted,difference,hit" << std::endl;  
+  output << "data_point,predicted,difference,hit," << std::endl;  
   std::string line = "";
   float lastValue = 0;
   unsigned int points = 0;
   unsigned int hits = 0;
+  float mean = 0;
   
   while(getline(input, line)) {
     float dataPoint = strtof(line.c_str(), 0);
     float predicted = predictor->predictNext(lastValue);
-    double difference = fabs(dataPoint - predicted);
+    float difference = fabs(dataPoint - predicted);
+    mean += difference;
     float margin = dataPoint * accMargin;
     unsigned int hit = (predicted >= dataPoint - margin && predicted <= dataPoint + margin) ? 1 : 0;
     
@@ -115,10 +118,13 @@ int main(int argc, char* argv[]) {
       lastValue = dataPoint;
   }
   
+  mean = mean/points;
+  
   std::cout << "DONE!\n" << std::endl;
   float hitsPerc = ((float) hits / (float) points) * 100;
   
-  std::cout << "Predictor Hits: " << hitsPerc << "% (" << hits << "/" << points << ")\n" << std::endl;
+  std::cout << "Predictor Hits: " << hitsPerc << "% (" << hits << "/" << points << ")" << std::endl;
+  std::cout << "\"Error\" Mean:   " << mean << "\n" << std::endl;
 
   // Clean-up
   input.close();

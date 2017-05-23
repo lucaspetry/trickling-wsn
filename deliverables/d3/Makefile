@@ -15,12 +15,15 @@ all:
 	${CC} -o ${LINEAR} ${SRC_LINEAR}
 	${CC} -o ${ELMAN} ${SRC_ELMAN}
 
-linear:
+linear: FORCE
 	${CC} -o ${LINEAR} ${SRC_LINEAR}
 
-elman:
+elman: FORCE
 	${CC} -o ${ELMAN} ${SRC_ELMAN}
 
 clean:
 	-@rm ${LINEAR}
 	-@rm ${ELMAN}
+
+FORCE:
+	
