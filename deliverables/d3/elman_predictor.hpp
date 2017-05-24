@@ -32,7 +32,7 @@ public:
         _biasOutputLayer = biasOutputLayer;
 
         for(int i = 0; i < HIDDEN_UNITS; i++) {
-          _fHiddenLayer[i] = 0;
+          _fHiddenLayer[i] = 1;
         }
       }
 
@@ -82,11 +82,11 @@ public:
     return outputActivationFunction(sumOutputLayer);
   }
 
-  Type activationFunction(float summation) {
-    return 2/(1+exp(2*summation))-1;
+  float activationFunction(float summation) {
+    return 2/(1+exp(-2*summation))-1;
   }
 
-  Type outputActivationFunction(float summation) {
+  float outputActivationFunction(float summation) {
     return summation;
   }
 };
