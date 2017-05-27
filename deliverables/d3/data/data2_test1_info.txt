@@ -1,16 +1,17 @@
-./linear -in data/data2.dat -out data/data2_results.txt -margin 0.01 -window 5 -lrate 0.0000001 -i 100 -m 0 -b 0
+./linear -in data/data2.dat -out data/data2_results.txt -margin 0.01 -window 2 -lrate 0.0000005 -i 3000 -m 0 -b 0
 
 Test Parameters:
 > Input File:        data/data2.dat
 > Output File:       data/data2_results.txt
 > Acceptance Margin: 0.01
-> Window Size:       5
-> Learning Rate:     1e-07
-> GD Iterations:     100
+> Window Size:       2
+> Learning Rate:     5e-07
+> GD Iterations:     3000
 > Initial m:         0
 > Initial b:         0
 
 Running predictor... DONE!
 
-Predictor Hits: 95.05% (1901/2000)
-"Error" Mean:   22.6697
+Predictor Hits: 97.45% (1949/2000)
+"Error" Mean:   13.6566
+
