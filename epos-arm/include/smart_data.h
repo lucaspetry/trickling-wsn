@@ -5,6 +5,7 @@
 
 #include <tstp.h>
 #include <periodic_thread.h>
+#include <predictor.h>
 #include <utility/observer.h>
 
 __BEGIN_SYS
@@ -205,6 +206,11 @@ public:
         db << ":u=" << d._unit << ",v=" << d._value << ",e=" << int(d._error) << ",c=" << d._coordinates << ",t=" << d._time << ",x=" << d._expiry << "}";
         return db;
     }
+    
+protected:
+    void broadcast() {
+        notify();
+    }
 
 private:
     void update(TSTP::Observed * obs, int subject, TSTP::Buffer * buffer) {
@@ -248,7 +254,7 @@ private:
                 _coordinates = response->origin();
                 _time = response->time();
                 db<Smart_Data>(INF) << "Smart_Data:update[R]:this=" << this << " => " << *this << endl;
-                notify();
+                broadcast();
             }
         }
         case TSTP::COMMAND: {
@@ -268,7 +274,7 @@ private:
         Transducer::sense(_device, this);
         db<Smart_Data>(TRC) << "Smart_Data::update(this=" << this << ",exp=" << _expiry << ") => " << _value << endl;
         db<Smart_Data>(TRC) << "Smart_Data::update:responsive=" << _responsive << " => " << *reinterpret_cast<TSTP::Response *>(_responsive) << endl;
-        notify();
+        broadcast();
         if(_responsive) {
             _responsive->value(_value);
             _responsive->time(_time);
@@ -288,14 +294,14 @@ private:
                 data->_responsive->time(t);
                 data->_responsive->respond(t + expiry);
 
-                data->notify();
+                data->broadcast();
             }
         } while(Periodic_Thread::wait_next());
 
         return 0;
     }
 
-private:
+protected:
     Unit _unit;
     Value _value;
     Error _error;
