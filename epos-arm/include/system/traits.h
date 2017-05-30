@@ -198,6 +198,23 @@ template<> template <typename S> struct Traits<Smart_Data<S>>: public Traits<Net
     static const bool enabled = NETWORKS::Count<TSTP>::Result;
 };
 
+template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public Traits<Smart_Data<S>>
+{
+    enum {LINEAR_REGRESSION, ELMAN_NEURAL_NETWORK};
+    
+    static const float ACC_MARGIN = 0.05;
+    static const int PREDICTOR = LINEAR_REGRESSION;
+};
+
+template<> template <typename T> struct Traits<Linear_Predictor<T>>: public Traits<void>
+{
+    static const unsigned int WINDOW_SIZE = 50;
+    static const float LRATE = 0.0001;
+    static const unsigned short GD_ITERATIONS = 1000;
+    static const unsigned short M = 0;
+    static const unsigned short B = 0;
+};
+
 template<> struct Traits<IP>: public Traits<Network>
 {
     static const bool enabled = NETWORKS::Count<IP>::Result;
