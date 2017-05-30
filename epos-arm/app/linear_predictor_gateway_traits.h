@@ -206,8 +206,8 @@ template<> struct Traits<Smart_Plug>: public Traits<Machine_Common>
     static const bool enabled = false;
 
     enum { DIMMER, SWITCH, DISABLED };
-    static const unsigned int P1_ACTUATOR = DISABLED;
-    static const unsigned int P2_ACTUATOR = DISABLED;
+    static const unsigned int P1_ACTUATOR = SWITCH;
+    static const unsigned int P2_ACTUATOR = DIMMER;
     static const unsigned int PWM_TIMER_CHANNEL = 0;
     static const unsigned int PWM_PERIOD = 100; // us
 
@@ -254,7 +254,7 @@ template<> struct Traits<CC2538>: public Traits<NIC>
 {
     static const unsigned int UNITS = NICS::Count<CC2538>::Result;
     static const unsigned int RECEIVE_BUFFERS = 20; // per unit
-    static const bool gpio_debug = false;
+    static const bool gpio_debug = true;
     static const bool reset_backdoor = true;
 };
 
@@ -376,14 +376,14 @@ template<> struct Traits<TSTP>: public Traits<Network>
 {
     static const bool debugged = Traits<Network>::debugged || Traits<NIC>::promiscuous;
     static const bool enabled = NETWORKS::Count<TSTP>::Result;
-    static const bool sink = false;
+    static const bool sink = true;
 };
 
 template<typename S>
 class TSTP_MAC;
 template<> template <typename S> struct Traits<TSTP_MAC<S>>: public Traits<TSTP>
 {
-    //static const bool debugged = true;//Traits<NIC>::promiscuous;
+    //static const bool debugged = Traits<NIC>::promiscuous;
     //static const bool hysterically_debugged = true;
 };
 
@@ -392,6 +392,25 @@ template<> template <typename S> struct Traits<Smart_Data<S>>: public Traits<Net
     //static const bool debugged = true;
     static const bool enabled = NETWORKS::Count<TSTP>::Result;
 };
+
+template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public Traits<Smart_Data<S>>
+{
+    enum {LINEAR_REGRESSION, ELMAN_NEURAL_NETWORK};
+    
+    static const float ACC_MARGIN;;
+    static const unsigned int PREDICTOR = LINEAR_REGRESSION;
+};
+template<> template <typename S> const float Traits<Predictive_Smart_Data<S>>::ACC_MARGIN = 0.05f;
+
+template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
+{
+    static const unsigned int WINDOW_SIZE = 50;
+    static const float LRATE;
+    static const unsigned short GD_ITERATIONS = 1000;
+    static const unsigned short M = 0;
+    static const unsigned short B = 0;
+};
+template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.0001f;
 
 template<> struct Traits<IP>: public Traits<Network>
 {
