@@ -4,6 +4,7 @@
 #define __cortex_transducer_h
 
 #include <smart_data.h>
+#include <predictive_smart_data.h>
 
 #include <keyboard.h>
 #include <smart_plug.h>
@@ -371,6 +372,8 @@ typedef Smart_Data<Pluviometer> Rain;
 typedef Smart_Data<RFID_Sensor> RFID;
 typedef Smart_Data<Switch_Sensor> Presence;
 typedef Smart_Data<Switch_Sensor> Switch;
+
+typedef Predictive_Smart_Data<Switch_Sensor> Switch_Test;
 
 
 #endif

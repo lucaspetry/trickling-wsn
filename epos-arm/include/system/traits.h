@@ -202,18 +202,20 @@ template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public
 {
     enum {LINEAR_REGRESSION, ELMAN_NEURAL_NETWORK};
     
-    static const float ACC_MARGIN = 0.05;
-    static const int PREDICTOR = LINEAR_REGRESSION;
+    static const float ACC_MARGIN;;
+    static const unsigned int PREDICTOR = LINEAR_REGRESSION;
 };
+template<> template <typename S> const float Traits<Predictive_Smart_Data<S>>::ACC_MARGIN = 0.05f;
 
-template<> template <typename T> struct Traits<Linear_Predictor<T>>: public Traits<void>
+template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
 {
     static const unsigned int WINDOW_SIZE = 50;
-    static const float LRATE = 0.0001;
+    static const float LRATE;
     static const unsigned short GD_ITERATIONS = 1000;
     static const unsigned short M = 0;
     static const unsigned short B = 0;
 };
+template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.0001f;
 
 template<> struct Traits<IP>: public Traits<Network>
 {

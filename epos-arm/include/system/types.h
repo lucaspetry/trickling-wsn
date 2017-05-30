@@ -191,6 +191,12 @@ class Port;
 template<typename S>
 class Smart_Data;
 
+template<typename S>
+class Predictive_Smart_Data;
+
+template<typename S>
+class Linear_Predictor;
+
 // Framework
 class Framework;
 template<typename Component> class Handle;

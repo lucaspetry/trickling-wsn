@@ -5,11 +5,11 @@
 
 __BEGIN_SYS
 
-template<typename T>
+template<typename Type>
 class Predictor
 {
 public:
-    virtual T predict_next(T last_value) = 0;
+    virtual Type predict_next(Type last_value) = 0;
 };
 
 __END_SYS

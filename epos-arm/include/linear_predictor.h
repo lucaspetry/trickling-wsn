@@ -1,54 +1,59 @@
 // EPOS Linear Regression Predictor Declarations
 
-#ifndef __predictor_h
-#define __predictor_h
+#ifndef __linear_predictor_h
+#define __linear_predictor_h
 
 #include <predictor.h>
 
 __BEGIN_SYS
 
-template<typename T>
-class Linear_Predictor: public Predictor<T>
+template<typename Type>
+class Linear_Predictor: public Predictor<Type>
 {
 public:
-    Linear_Predictor() {}
+    Linear_Predictor() {
+        _current_idx = 0;
+        _t = 0;
+        _m = Traits<Linear_Predictor<Type>>::M;
+        _b = Traits<Linear_Predictor<Type>>::B;
+    }
     
-    T predict_next(T last_value) {
-        T nextValue = M * T + B;
+    Type predict_next(Type last_value) {
+        Type next_value = _m * _t + _b;
 
         add_last_value(last_value);    
         update_coefficients();
-        T++;
+        _t++;
 
-        return nextValue;    
+        return next_value;    
     }
     
 private:
     void add_last_value(Type last_value) {
-        if(CURRENT_IDX >= WINDOW_SIZE) {
+        if(_current_idx >= WINDOW_SIZE) {
             for(unsigned int i = 1; i < WINDOW_SIZE; i++)
-                DATA_WINDOW[i - 1] = DATA_WINDOW[i];
+                _data_window[i - 1] = _data_window[i];
 
-            CURRENT_IDX = WINDOW_SIZE - 1;
+            _current_idx = WINDOW_SIZE - 1;
         }
 
-        DATA_WINDOW[CURRENT_IDX++] = last_value;
+        _data_window[_current_idx++] = last_value;
     }
   
     void update_coefficients() {
-        float b = B;
-        float m = M;
+        float b = _b;
+        float m = _m;
 
         for(int i = 0; i < GD_ITERATIONS; i++) {
             float b_gradient = 0;
             float m_gradient = 0;
 
-            for(int j = 0; j < CURRENT_IDX; j++) {
-                int x = T - CURRENT_IDX + j;
-                float y = DATA_WINDOW[j];
+            for(int j = 0; j < _current_idx; j++) {
+                int x = _t - _current_idx + j;
+                float y = _data_window[j];
 
-                m_gradient += -(2.0/CURRENT_IDX) * x * (y - ((m * x) + b));
-                b_gradient += -(2.0/CURRENT_IDX) * (y - ((m * x) + b));
+                m_gradient += -(2.0/_current_idx) * x * (y - ((m * x) + b));
+                b_gradient += -(2.0/_current_idx) * (y - ((m * x) + b));
 
             }
 
@@ -56,19 +61,19 @@ private:
             b = b - (LRATE * b_gradient);
         }
 
-        B = b;
-        M = m;
+        _m = m;
+        _b = b;
     }
   
 private:
-    static const unsigned int WINDOW_SIZE = Traits<Linear_Predictor<T>>::WINDOW_SIZE;
-    static const float LRATE = Traits<Linear_Predictor<T>>::LRATE;
-    static const unsigned short GD_ITERATIONS = Traits<Linear_Predictor<T>>::GD_ITERATIONS;
-    static T DATA_WINDOW[WINDOW_SIZE];
-    static unsigned int CURRENT_IDX = 0;
-    static unsigned long T = 0;
-    static unsigned short M = Traits<Linear_Predictor<T>>::M;
-    static unsigned short B = Traits<Linear_Predictor<T>>::B;
+    static const unsigned int WINDOW_SIZE = Traits<Linear_Predictor<Type>>::WINDOW_SIZE;
+    static const float LRATE = Traits<Linear_Predictor<Type>>::LRATE;
+    static const unsigned short GD_ITERATIONS = Traits<Linear_Predictor<Type>>::GD_ITERATIONS;
+    Type _data_window[WINDOW_SIZE];
+    unsigned int _current_idx;
+    unsigned long _t;
+    unsigned short _m;
+    unsigned short _b;
     
 };
 

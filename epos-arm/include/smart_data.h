@@ -5,7 +5,6 @@
 
 #include <tstp.h>
 #include <periodic_thread.h>
-#include <predictor.h>
 #include <utility/observer.h>
 
 __BEGIN_SYS
