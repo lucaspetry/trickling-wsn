@@ -16,7 +16,7 @@ int main()
     // Region of interest (Temperature Sensor)
     TSTP::Time start = TSTP::now();
     TSTP::Time end = start + INTEREST_EXPIRY;
-    TSTP::Region region_temp(TSTP::Coordinates(0.5, 0.5, 0), 10, start, end);
+    TSTP::Region region_temp(TSTP::Coordinates(1, 1, 1), 10, start, end);
     cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Region" << endl;
 
     // Data of interest

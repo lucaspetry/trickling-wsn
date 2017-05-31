@@ -58,11 +58,12 @@ public:
             _acc_margin = Traits<Predictive_Smart_Data<Transducer>>::ACC_MARGIN;
     }
     
-protected:
-    void broadcast() {
+protected:    
+    bool should_send() {
         Value predicted = _predictor->predict_next(_last_value);
         Value real = Smart_Data<Transducer>::_value;
         
+        cout << "Predictive_Smart_Data::should_send()\n"; // TODO(LUCAS)
         cout << "Real:      " << real << "\n"; // TODO(LUCAS)
         cout << "Predicted: " << predicted << "\n"; // TODO(LUCAS)
             
@@ -70,10 +71,11 @@ protected:
         if(predicted >= real * (1 - _acc_margin) && predicted <= real * (1 + _acc_margin)) {
             _last_value = predicted;
             cout << ":: Observers won't be notified!\n"; // TODO(LUCAS)
+            return false;
         } else {
             _last_value = real;
             cout << ":: Observers will be notified!\n"; // TODO(LUCAS)
-            Smart_Data<Transducer>::notify();
+            return true;
         }
     }
     

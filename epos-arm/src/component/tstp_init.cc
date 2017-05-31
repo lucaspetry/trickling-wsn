@@ -24,7 +24,7 @@ void TSTP::Locator::bootstrap()
     if(Traits<TSTP>::sink) {
         _here = TSTP::sink(); cout << "\nSINK!\n"; // TODO(LUCAS)
     } else {
-        _here = Coordinates(0.5, 0.5, 0); cout << "\nNOT SINK!\n"; // TODO(LUCAS) // Adjust this value to the coordinates of the sensor
+        _here = Coordinates(1, 1, 1); cout << "\nNOT SINK!\n"; // TODO(LUCAS) // Adjust this value to the coordinates of the sensor
     }
 
     // You can edit the values below to define coordinates based on the machine ID

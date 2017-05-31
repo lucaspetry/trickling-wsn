@@ -1479,9 +1479,9 @@ public:
     static void epoch(const Time & t) { _epoch = t - now(); }
     static void coordinates(const Global_Coordinates & c) { _global_coordinates = c; }
 
-    static void attach(Observer * obs, void * subject) { _observed.attach(obs, int(subject)); OStream cout; cout << "TesteATTACH\n"; } // TODO(LUCAS)
-    static void detach(Observer * obs, void * subject) { _observed.detach(obs, int(subject)); OStream cout; cout << "TesteDETACH\n"; } // TODO(LUCAS) 
-    static bool notify(void * subject, Buffer * buf) { return _observed.notify(int(subject), buf); OStream cout; cout << "TesteNOTIFY\n"; } // TODO(LUCAS)
+    static void attach(Observer * obs, void * subject) { _observed.attach(obs, int(subject)); }
+    static void detach(Observer * obs, void * subject) { _observed.detach(obs, int(subject)); } 
+    static bool notify(void * subject, Buffer * buf) { return _observed.notify(int(subject), buf); }
 
     template<unsigned int UNIT>
     static void init(const NIC & nic);

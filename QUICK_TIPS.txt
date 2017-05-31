@@ -1,0 +1,8 @@
+=============================================================
+			QUICK TIPS
+=============================================================
+Get EPOSMote devices connected
+$ dmesg | grep tty
+
+Get device ttyACM0 output
+minicom -D /dev/ttyACM0

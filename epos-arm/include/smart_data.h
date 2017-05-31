@@ -206,10 +206,11 @@ public:
         return db;
     }
     
-protected:
-    void broadcast() {
-        notify();
+protected:    
+    virtual bool should_send() {
+        return true; // Regular Smart Data will always send the data
     }
+
 
 private:
     void update(TSTP::Observed * obs, int subject, TSTP::Buffer * buffer) {
@@ -244,7 +245,6 @@ private:
             }
         } break;
         case TSTP::RESPONSE: {
-            cout << "TesteRESPONSE\n"; // TODO(LUCAS)
             TSTP::Response * response = reinterpret_cast<TSTP::Response *>(packet);
             db<Smart_Data>(INF) << "Smart_Data:update[R]:msg=" << response << " => " << *response << endl;
             if(response->time() > _time) {
@@ -256,7 +256,8 @@ private:
                 _coordinates = response->origin();
                 _time = response->time();
                 db<Smart_Data>(INF) << "Smart_Data:update[R]:this=" << this << " => " << *this << endl;
-                broadcast();
+                cout << "notify() RESPONSE\n"; // TODO(LUCAS)
+                notify();
             }
         }
         case TSTP::COMMAND: {
@@ -272,11 +273,13 @@ private:
     }
 
     void update(typename Transducer::Observed * obs) {
+            OStream cout; // TODO(LUCAS)
         _time = TSTP::now();
         Transducer::sense(_device, this);
         db<Smart_Data>(TRC) << "Smart_Data::update(this=" << this << ",exp=" << _expiry << ") => " << _value << endl;
         db<Smart_Data>(TRC) << "Smart_Data::update:responsive=" << _responsive << " => " << *reinterpret_cast<TSTP::Response *>(_responsive) << endl;
-        broadcast();
+        cout << "notify() UPDATE\n"; // TODO(LUCAS)
+        notify();
         if(_responsive) {
             _responsive->value(_value);
             _responsive->time(_time);
@@ -285,18 +288,24 @@ private:
     }
 
     static int updater(unsigned int dev, Time_Offset expiry, Smart_Data * data) {
+            OStream cout; // TODO(LUCAS)
         do {
             Time t = TSTP::now();
 
             // TODO: The thread should be deleted or suspended when time is up
             if(t < data->_responsive->t1()) {
                 Transducer::sense(dev, data);
+                
+                if(!data->should_send()) // If shouldn't send, doesn't send
+                  return 0;
+                
                 data->_time = t;
                 data->_responsive->value(data->_value);
                 data->_responsive->time(t);
                 data->_responsive->respond(t + expiry);
 
-                data->broadcast();
+                cout << "notify() UPDATER\n"; // TODO(LUCAS)
+                data->notify();
             }
         } while(Periodic_Thread::wait_next());
 
