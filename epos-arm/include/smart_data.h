@@ -158,7 +158,7 @@ public:
         return ret;
     }
 
-    operator Value() {
+    virtual operator Value() {
         if(expired()) {
             if((_device != REMOTE) && (Transducer::POLLING)) { // Local data source
                 Transducer::sense(_device, this); // read sensor
