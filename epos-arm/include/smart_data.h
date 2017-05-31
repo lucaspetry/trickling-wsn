@@ -297,7 +297,7 @@ private:
                 Transducer::sense(dev, data);
                 
                 if(!data->should_send()) // If shouldn't send, doesn't send
-                  return 0;
+                  continue;
                 
                 data->_time = t;
                 data->_responsive->value(data->_value);
