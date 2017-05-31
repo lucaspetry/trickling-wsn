@@ -213,10 +213,12 @@ protected:
 
 private:
     void update(TSTP::Observed * obs, int subject, TSTP::Buffer * buffer) {
+            OStream cout; // TODO(LUCAS)
         TSTP::Packet * packet = buffer->frame()->data<TSTP::Packet>();
         db<Smart_Data>(TRC) << "Smart_Data::update(obs=" << obs << ",cond=" << reinterpret_cast<void *>(subject) << ",data=" << packet << ")" << endl;
         switch(packet->type()) {
         case TSTP::INTEREST: {
+            cout << "TesteINTEREST\n"; // TODO(LUCAS)
             TSTP::Interest * interest = reinterpret_cast<TSTP::Interest *>(packet);
             db<Smart_Data>(INF) << "Smart_Data::update[I]:msg=" << interest << " => " << *interest << endl;
             _responsive->t0(interest->region().t0);
@@ -242,6 +244,7 @@ private:
             }
         } break;
         case TSTP::RESPONSE: {
+            cout << "TesteRESPONSE\n"; // TODO(LUCAS)
             TSTP::Response * response = reinterpret_cast<TSTP::Response *>(packet);
             db<Smart_Data>(INF) << "Smart_Data:update[R]:msg=" << response << " => " << *response << endl;
             if(response->time() > _time) {

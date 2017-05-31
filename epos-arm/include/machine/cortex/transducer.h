@@ -373,8 +373,6 @@ typedef Smart_Data<RFID_Sensor> RFID;
 typedef Smart_Data<Switch_Sensor> Presence;
 typedef Smart_Data<Switch_Sensor> Switch;
 
-typedef Predictive_Smart_Data<Temperature_Sensor> Temperature_Test;
-
 
 #endif
 

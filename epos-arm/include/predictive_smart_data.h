@@ -9,8 +9,6 @@
 
 #include <utility/ostream.h>
 
-using namespace EPOS;
-
 __BEGIN_SYS
 
 // Predictive Smart Data is a Smart Data that makes use of a predictor to do trickling.
@@ -36,7 +34,6 @@ public:
 public:
     Predictive_Smart_Data(unsigned int dev, const Microsecond & expiry)
     : Smart_Data<Transducer>(dev, expiry, Smart_Data<Transducer>::ADVERTISED), _last_value(0) {
-        cout << "Built Predictive_Smart_Data: Const 1.\n"; // TODO(LUCAS)
         if(Traits<Predictive_Smart_Data<Transducer>>::PREDICTOR == Traits<Predictive_Smart_Data<Transducer>>::LINEAR_REGRESSION)
             _predictor = new Linear_Predictor<Value>();
              
@@ -50,7 +47,6 @@ public:
     
     Predictive_Smart_Data(const Region & region, const Microsecond & expiry, const Microsecond & period = 0)
     : Smart_Data<Transducer>(region, expiry, period, Smart_Data<Transducer>::ADVERTISED), _last_value(0) {
-        cout << "Built Predictive_Smart_Data: Const 2.\n"; // TODO(LUCAS)
         if(Traits<Predictive_Smart_Data<Transducer>>::PREDICTOR == Traits<Predictive_Smart_Data<Transducer>>::LINEAR_REGRESSION)
             _predictor = new Linear_Predictor<Value>();
              
@@ -85,7 +81,7 @@ private:
     float _acc_margin;
     Predictor<Value> * _predictor;
     Value _last_value;
-    OStream cout;
+    EPOS::OStream cout;
   
 };
 

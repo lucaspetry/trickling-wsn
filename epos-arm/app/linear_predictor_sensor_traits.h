@@ -206,8 +206,8 @@ template<> struct Traits<Smart_Plug>: public Traits<Machine_Common>
     static const bool enabled = false;
 
     enum { DIMMER, SWITCH, DISABLED };
-    static const unsigned int P1_ACTUATOR = DISABLED;
-    static const unsigned int P2_ACTUATOR = DISABLED;
+    static const unsigned int P1_ACTUATOR = SWITCH;
+    static const unsigned int P2_ACTUATOR = DIMMER;
     static const unsigned int PWM_TIMER_CHANNEL = 0;
     static const unsigned int PWM_PERIOD = 100; // us
 
@@ -254,7 +254,7 @@ template<> struct Traits<CC2538>: public Traits<NIC>
 {
     static const unsigned int UNITS = NICS::Count<CC2538>::Result;
     static const unsigned int RECEIVE_BUFFERS = 20; // per unit
-    static const bool gpio_debug = false;
+    static const bool gpio_debug = true;
     static const bool reset_backdoor = true;
 };
 
@@ -383,7 +383,7 @@ template<typename S>
 class TSTP_MAC;
 template<> template <typename S> struct Traits<TSTP_MAC<S>>: public Traits<TSTP>
 {
-    //static const bool debugged = true;//Traits<NIC>::promiscuous;
+    //static const bool debugged = Traits<NIC>::promiscuous;
     //static const bool hysterically_debugged = true;
 };
 

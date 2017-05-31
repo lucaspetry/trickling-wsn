@@ -1,27 +1,28 @@
-#include <smart_data.h>
+#include <predictive_smart_data.h>
 #include <utility/ostream.h>
 #include <alarm.h>
 
 using namespace EPOS;
 
-const TSTP::Time DATA_PERIOD = 5 * 1000000;
-const TSTP::Time DATA_EXPIRY = 2 * DATA_PERIOD;
+const TSTP::Time DATA_PERIOD = 10 * 1000000;
+const TSTP::Time DATA_EXPIRY = 3 * DATA_PERIOD;
 const TSTP::Time INTEREST_EXPIRY = 5 * 60 * 1000000;
 
 int main()
 {
-    // Temperature Sensor
-    TSTP::Coordinates data_temp(10, 10, 2);
-
-    // Regions of interest
+    OStream cout;
+    cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Initializing..." << endl;
+  
+    // Region of interest (Temperature Sensor)
     TSTP::Time start = TSTP::now();
     TSTP::Time end = start + INTEREST_EXPIRY;
-    TSTP::Region region_temp(data_temp, 50, start, end);
+    TSTP::Region region_temp(TSTP::Coordinates(0.5, 0.5, 0), 10, start, end);
+    cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Region" << endl;
 
     // Data of interest
     Temperature data(region_temp, DATA_EXPIRY, DATA_PERIOD);
-
-    OStream cout;
+    cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Interest" << endl;
+    cout << "[ GATEWAY ]  " << TSTP::now() << "  Location at: " << data.location() << endl;
 
     while(TSTP::now() < end) {
         Alarm::delay(DATA_PERIOD);
@@ -29,7 +30,8 @@ int main()
         Temperature::Value v;
         
         v = data;
-	    cout << "Data read: " << v << endl;
+	    cout << "[ GATEWAY ]  " << TSTP::now() << "  Data read: " << v << endl;
+        cout << "[ GATEWAY ]  " << TSTP::now() << "  Location at: " << data.location() << endl;
     }
 
     return 0;

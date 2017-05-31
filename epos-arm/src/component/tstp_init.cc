@@ -16,20 +16,23 @@ TSTP::TSTP()
 void TSTP::Locator::bootstrap()
 {
     db<TSTP>(TRC) << "TSTP::Locator::bootstrap()" << endl;
-
+  
     _confidence = 100;
 
+    OStream cout; // TODO(LUCAS)
     // This is used if your machine ID is unlisted below
-    if(Traits<TSTP>::sink)
-        _here = TSTP::sink();
-    else
-        _here = Coordinates(0, 100, 200); // Adjust this value to the coordinates of the sensor
+    if(Traits<TSTP>::sink) {
+        _here = TSTP::sink(); cout << "\nSINK!\n"; // TODO(LUCAS)
+    } else {
+        _here = Coordinates(0.5, 0.5, 0); cout << "\nNOT SINK!\n"; // TODO(LUCAS) // Adjust this value to the coordinates of the sensor
+    }
 
     // You can edit the values below to define coordinates based on the machine ID
-    if(!memcmp(Machine::id(), "\x00\x4b\x12\x00\x00\x00\x00\x00", 8)) // Adjust this value to the ID of the mote
-        _here = TSTP::sink();
-    else if(!memcmp(Machine::id(), "\x00\x4b\x12\x00\x00\x00\x00\x00", 8)) // Adjust this value to the ID of the mote
-        _here = Coordinates(10,10,0); // Adjust this value to the coordinates of the sensor
+//    if(!memcmp(Machine::id(), "\x01\x00H\x00\x00\x00\x00\x00\x00\x00\x00\xb7", 8)) { // Adjust this value to the ID of the mote
+//        _here = TSTP::sink(); cout << "\nSINK!\n"; // TODO(LUCAS)
+//    } else if(!memcmp(Machine::id(), "\x01\x00H\x00\x00\x00\x00\x00\x00\x00\x00\xb7", 8)) { // Adjust this value to the ID of the mote
+//        _here = Coordinates(0.5,0.5,0); cout << "\nNOT SINK!\n"; // TODO(LUCAS) // Adjust this value to the coordinates of the sensor
+//    }
 
     // For the Global Coordinates, Latitude, Longitude and z were taken from Google Maps,
     // then transformed into x,y using The World Coordinate Converter (http://twcc.fr/)
@@ -152,10 +155,10 @@ void TSTP::Locator::bootstrap()
     //        _confidence = 0;
     //}
 
-    if(Traits<Radio>::promiscuous) {
-        _here = Coordinates(12,12,12);
-        _confidence = 100;
-    }
+//    if(Traits<Radio>::promiscuous) {
+//        _here = Coordinates(12,12,12);
+//        _confidence = 100;
+//    }
 
     TSTP::_nic->attach(this, NIC::TSTP);
 
