@@ -20,7 +20,10 @@ int main()
     while(true) {
         Alarm::delay(DATA_PERIOD);
 
-	    cout << "[ SENSOR ]  " << TSTP::now() << "  Still running" << endl;      
+        Temperature::Value v;
+        
+        v = data;
+	    cout << "[ SENSOR ]  " << TSTP::now() << "  Still running (Read: " << v << ")" << endl;      
         cout << "[ SENSOR ]  " << TSTP::now() << "  Location at: " << data.location() << endl;
     }
   

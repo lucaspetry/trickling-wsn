@@ -204,6 +204,7 @@ template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public
     
     static const float ACC_MARGIN;;
     static const unsigned int PREDICTOR = LINEAR_REGRESSION;
+    static const unsigned int SYNC_INTERVAL = 5;
 };
 template<> template <typename S> const float Traits<Predictive_Smart_Data<S>>::ACC_MARGIN = 0.05f;
 

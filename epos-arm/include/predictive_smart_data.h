@@ -15,50 +15,38 @@ __BEGIN_SYS
 template<typename Transducer>
 class Predictive_Smart_Data: public Smart_Data<Transducer>
 {
-// TODO(LUCAS) - Copiei isso mas não deveria
 public:
-    static const unsigned int UNIT = Transducer::UNIT;
-    static const unsigned int NUM = Transducer::NUM;
-    static const unsigned int ERROR = Transducer::ERROR;
-    typedef typename TSTP::Unit::Get<NUM>::Type Value;
+    typedef typename TSTP::Unit::Get<Transducer::NUM>::Type Value;
     
     typedef RTC::Microsecond Microsecond;
 
-    typedef TSTP::Unit Unit;
-    typedef TSTP::Error Error;
-    typedef TSTP::Coordinates Coordinates;
     typedef TSTP::Region Region;
     typedef TSTP::Time Time;
     typedef TSTP::Time_Offset Time_Offset;
+    typedef typename Smart_Data<Transducer>::Mode Mode;
     
 public:
     Predictive_Smart_Data(unsigned int dev, const Microsecond & expiry)
-    : Smart_Data<Transducer>(dev, expiry, Smart_Data<Transducer>::ADVERTISED), _last_value(0) {
-        if(Traits<Predictive_Smart_Data<Transducer>>::PREDICTOR == Traits<Predictive_Smart_Data<Transducer>>::LINEAR_REGRESSION)
-            _predictor = new Linear_Predictor<Value>();
-             
-        if(Traits<Predictive_Smart_Data<Transducer>>::ACC_MARGIN > 1)
-            _acc_margin = 1;
-        else if(Traits<Predictive_Smart_Data<Transducer>>::ACC_MARGIN < 0)
-            _acc_margin = 0;
-        else
-            _acc_margin = Traits<Predictive_Smart_Data<Transducer>>::ACC_MARGIN;
+    : Smart_Data<Transducer>(dev, expiry, Smart_Data<Transducer>::ADVERTISED),
+    _predictor(new P_Type()), _acc_margin(P_Traits::ACC_MARGIN / (float) 100), 
+    _last_value(0), _sync_interval(P_Traits::SYNC_INTERVAL), _trusty(true) {
+        assert(P_Traits::ACC_MARGIN >= 0 && P_Traits::ACC_MARGIN <= 100);
     }
     
-    Predictive_Smart_Data(const Region & region, const Microsecond & expiry, const Microsecond & period = 0)
-    : Smart_Data<Transducer>(region, expiry, period, Smart_Data<Transducer>::PRIVATE), _last_value(0) {
-        if(Traits<Predictive_Smart_Data<Transducer>>::PREDICTOR == Traits<Predictive_Smart_Data<Transducer>>::LINEAR_REGRESSION)
-            _predictor = new Linear_Predictor<Value>();
-             
-        if(Traits<Predictive_Smart_Data<Transducer>>::ACC_MARGIN > 1)
-            _acc_margin = 1;
-        else if(Traits<Predictive_Smart_Data<Transducer>>::ACC_MARGIN < 0)
-            _acc_margin = 0;
-        else
-            _acc_margin = Traits<Predictive_Smart_Data<Transducer>>::ACC_MARGIN;
+    Predictive_Smart_Data(const Region & region, const Microsecond & period = 0, const Mode & mode = Mode::PRIVATE)
+    : Smart_Data<Transducer>(region, period, period, mode),
+    _predictor(new P_Type()), _acc_margin(P_Traits::ACC_MARGIN / (float) 100),
+    _last_value(0), _sync_interval(P_Traits::SYNC_INTERVAL), _trusty(true) {
+        assert(P_Traits::ACC_MARGIN >= 0 && P_Traits::ACC_MARGIN <= 100);
     }
         
     operator Value() {
+        Value predicted;
+        if(Smart_Data<Transducer>::_mode != Smart_Data<Transducer>::ADVERTISED) { // TODO(LUCAS) - Verificar com Cesar
+            predicted = _predictor->predict_next(_last_value);
+            cout << "Predicted: " << predicted << "\n"; // TODO(LUCAS)
+        }
+        
         if(Smart_Data<Transducer>::expired()) {
             if((Smart_Data<Transducer>::_device != Smart_Data<Transducer>::REMOTE) && (Transducer::POLLING)) { // Local data source
                 Transducer::sense(Smart_Data<Transducer>::_device, this); // read sensor
@@ -66,45 +54,64 @@ public:
             } else {
                 // TODO(LUCAS) - PREDICT
                 // Assumes predicted value is good
-                Value predicted = _predictor->predict_next(Smart_Data<Transducer>::_value);
-                Smart_Data<Transducer>::_value = predicted;
+                _last_value = predicted;
                 
                 cout << "Predictive_Smart_Data::Value()\n"; // TODO(LUCAS)
-                cout << "Predicted: " << predicted << "\n"; // TODO(LUCAS)
+                if(P_Traits::SYNC_INTERVAL != 0 && _sync_interval == 0) {
+                    _trusty = false;
+                }
+                _sync_interval--;
             }
+        } else {
+            _sync_interval = P_Traits::SYNC_INTERVAL;
+            _last_value = Smart_Data<Transducer>::_value;
         }
-        Value ret = Smart_Data<Transducer>::_value;
+
+        Value ret = _last_value;
         if(Smart_Data<Transducer>::_mode & Smart_Data<Transducer>::CUMULATIVE) {
-            Smart_Data<Transducer>::_value = 0; cout << "Value set to ZERO!\n";
+            Smart_Data<Transducer>::_value = 0; 
+            cout << "Value set to ZERO!\n";
         }
         return ret;
     }
+
+    bool trusty() { return _trusty; }
     
 protected:    
-    bool should_send() {
+    void send(const Time t, Time_Offset expiry) {
         Value predicted = _predictor->predict_next(_last_value);
         Value real = Smart_Data<Transducer>::_value;
         
         cout << "Predictive_Smart_Data::should_send()\n"; // TODO(LUCAS)
         cout << "Real:      " << real << "\n"; // TODO(LUCAS)
         cout << "Predicted: " << predicted << "\n"; // TODO(LUCAS)
-            
+        
+        bool acc_dec_margin = predicted >= real * (1 - _acc_margin);
+        bool acc_add_margin = predicted <= real * (1 + _acc_margin);
+        bool check_sync = _sync_interval > 0 || P_Traits::SYNC_INTERVAL == 0;
+
         // If predicted data is acceptable do not notify observers
-        if(predicted >= real * (1 - _acc_margin) && predicted <= real * (1 + _acc_margin)) {
+        if( acc_dec_margin && acc_add_margin && check_sync) {
             _last_value = predicted;
+            _sync_interval--;
             cout << ":: Observers won't be notified!\n"; // TODO(LUCAS)
-            return false;
         } else {
             _last_value = real;
             cout << ":: Observers will be notified!\n"; // TODO(LUCAS)
-            return true;
+            Smart_Data<Transducer>::send(t, expiry);
+            _sync_interval = P_Traits::SYNC_INTERVAL;
         }
     }
     
 private:
-    float _acc_margin;
+    typedef Traits<Predictive_Smart_Data<Transducer>> P_Traits;
+    typedef typename IF<(P_Traits::PREDICTOR == P_Traits::LINEAR), Linear_Predictor<Value>, Linear_Predictor<Value>>::Result P_Type;
+
     Predictor<Value> * _predictor;
+    float _acc_margin;
     Value _last_value;
+    unsigned int _sync_interval;
+    bool _trusty;
     EPOS::OStream cout;
   
 };

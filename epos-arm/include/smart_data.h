@@ -207,14 +207,17 @@ public:
     }
     
 protected:    
-    virtual bool should_send() {
-        return true; // Regular Smart Data will always send the data
+    virtual void send(const Time t, Time_Offset expiry) {
+        _time = t;
+        _responsive->value(_value);
+        _responsive->time(t);
+        _responsive->respond(t + expiry);
+        notify();
     }
-
 
 private:
     void update(TSTP::Observed * obs, int subject, TSTP::Buffer * buffer) {
-            OStream cout; // TODO(LUCAS)
+        OStream cout; // TODO(LUCAS)
         TSTP::Packet * packet = buffer->frame()->data<TSTP::Packet>();
         db<Smart_Data>(TRC) << "Smart_Data::update(obs=" << obs << ",cond=" << reinterpret_cast<void *>(subject) << ",data=" << packet << ")" << endl;
         switch(packet->type()) {
@@ -288,24 +291,14 @@ private:
     }
 
     static int updater(unsigned int dev, Time_Offset expiry, Smart_Data * data) {
-            OStream cout; // TODO(LUCAS)
+        OStream cout; // TODO(LUCAS)
         do {
             Time t = TSTP::now();
 
             // TODO: The thread should be deleted or suspended when time is up
             if(t < data->_responsive->t1()) {
                 Transducer::sense(dev, data);
-                
-                if(!data->should_send()) // If shouldn't send, doesn't send
-                  continue;
-                
-                data->_time = t;
-                data->_responsive->value(data->_value);
-                data->_responsive->time(t);
-                data->_responsive->respond(t + expiry);
-
-                cout << "notify() UPDATER\n"; // TODO(LUCAS)
-                data->notify();
+                data->send(t, expiry);
             }
         } while(Periodic_Thread::wait_next());
 

@@ -5,7 +5,6 @@
 using namespace EPOS;
 
 const TSTP::Time DATA_PERIOD = 10 * 1000000;
-const TSTP::Time DATA_EXPIRY = 1 * DATA_PERIOD;
 const TSTP::Time INTEREST_EXPIRY = 5 * 60 * 1000000;
 
 int main()
@@ -20,7 +19,7 @@ int main()
     cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Region" << endl;
 
     // Data of interest
-    Predictive_Smart_Data<Temperature_Sensor> data(region_temp, DATA_EXPIRY, DATA_PERIOD);
+    Predictive_Smart_Data<Temperature_Sensor> data(region_temp, DATA_PERIOD);
     cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Interest" << endl;
     cout << "[ GATEWAY ]  " << TSTP::now() << "  Location at: " << data.location() << endl;
 
@@ -30,7 +29,7 @@ int main()
         Temperature::Value v;
         
         v = data;
-	    cout << "[ GATEWAY ]  " << TSTP::now() << "  Data read: " << v << endl;
+	    cout << "[ GATEWAY ]  " << TSTP::now() << "  Data read: " << v << " (Trusty: " << data.trusty() << ")" << endl;
         cout << "[ GATEWAY ]  " << TSTP::now() << "  Location at: " << data.location() << endl;
     }
 

@@ -395,12 +395,12 @@ template<> template <typename S> struct Traits<Smart_Data<S>>: public Traits<Net
 
 template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public Traits<Smart_Data<S>>
 {
-    enum {LINEAR_REGRESSION, ELMAN_NEURAL_NETWORK};
+    enum {LINEAR, ELMAN};
     
-    static const float ACC_MARGIN;;
-    static const unsigned int PREDICTOR = LINEAR_REGRESSION;
+    static const unsigned int ACC_MARGIN = 3;
+    static const unsigned int PREDICTOR = LINEAR;
+    static const unsigned int SYNC_INTERVAL = 5;
 };
-template<> template <typename S> const float Traits<Predictive_Smart_Data<S>>::ACC_MARGIN = 0.03f;
 
 template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
 {
@@ -408,7 +408,7 @@ template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
     static const float LRATE;
     static const unsigned short GD_ITERATIONS = 100;
     static const unsigned short M = 0;
-    static const unsigned short B = 137;
+    static const unsigned short B = 150;
 };
 template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.0000005f;
 

@@ -77,8 +77,8 @@ LINIT		= $(LINITNAME)_$(ARCH)
 LUTIL		= $(LUTILNAME)_$(ARCH)
 
 # Compiler prefixes
-ia32_COMP_PREFIX	:= /home/lucas/gcc-4.4.4/bin/ia32-
-armv7_COMP_PREFIX	:= /home/lucas/gcc-4.4.4-arm/bin/arm-
+ia32_COMP_PREFIX	:= /home/douglas/gcc-4.4.4/bin/ia32-
+armv7_COMP_PREFIX	:= /home/douglas/gcc-4.4.4/bin/arm-
 avr8_COMP_PREFIX        := /usr/local/avr/gcc-4.4.4/bin/avr-
 COMP_PREFIX		= $($(ARCH)_COMP_PREFIX)
 
