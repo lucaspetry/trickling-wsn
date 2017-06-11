@@ -395,7 +395,7 @@ template<> template <typename S> struct Traits<Smart_Data<S>>: public Traits<Net
 
 template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public Traits<Smart_Data<S>>
 {
-    enum {LINEAR, ELMAN};
+    enum {LINEAR, MLP};
     
     static const unsigned int ACC_MARGIN = 3;
     static const unsigned int PREDICTOR = LINEAR;

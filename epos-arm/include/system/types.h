@@ -197,6 +197,9 @@ class Predictive_Smart_Data;
 template<typename S>
 class Linear_Predictor;
 
+template<typename S>
+class MLP_Predictor;
+
 // Framework
 class Framework;
 template<typename Component> class Handle;

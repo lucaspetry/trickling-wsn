@@ -200,23 +200,35 @@ template<> template <typename S> struct Traits<Smart_Data<S>>: public Traits<Net
 
 template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public Traits<Smart_Data<S>>
 {
-    enum {LINEAR_REGRESSION, ELMAN_NEURAL_NETWORK};
+    enum {LINEAR, MLP};
     
-    static const float ACC_MARGIN;;
-    static const unsigned int PREDICTOR = LINEAR_REGRESSION;
+    static const unsigned int ACC_MARGIN = 3;
+    static const unsigned int PREDICTOR = LINEAR;
     static const unsigned int SYNC_INTERVAL = 5;
 };
-template<> template <typename S> const float Traits<Predictive_Smart_Data<S>>::ACC_MARGIN = 0.05f;
 
 template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
 {
-    static const unsigned int WINDOW_SIZE = 50;
+    static const unsigned int WINDOW_SIZE = 10;
     static const float LRATE;
-    static const unsigned short GD_ITERATIONS = 1000;
+    static const unsigned short GD_ITERATIONS = 100;
     static const unsigned short M = 0;
     static const unsigned short B = 0;
 };
-template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.0001f;
+template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.0000005f;
+
+template <typename S> struct Traits<MLP_Predictor<S>>: public Traits<void>
+{
+    static const unsigned int HIDDEN_UNITS = 5;
+    static const float HIDDEN_WEIGHTS[];
+    static const float HIDDEN_BIASES[];
+    static const float OUTPUT_WEIGHTS[];
+    static const float OUTPUT_BIAS;
+};
+template <typename S> const float Traits<MLP_Predictor<S>>::HIDDEN_WEIGHTS[] = {0.5, 0.5, 0.5, 0.5, 0.5};
+template <typename S> const float Traits<MLP_Predictor<S>>::HIDDEN_BIASES[] = {1, 1, 1, 1, 1};
+template <typename S> const float Traits<MLP_Predictor<S>>::OUTPUT_WEIGHTS[] = {0.5, 0.5, 0.5, 0.5, 0.5};
+template <typename S> const float Traits<MLP_Predictor<S>>::OUTPUT_BIAS = 1;
 
 template<> struct Traits<IP>: public Traits<Network>
 {
