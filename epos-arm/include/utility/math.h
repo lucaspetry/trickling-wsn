@@ -76,6 +76,24 @@ inline T pow(const T & x, unsigned int e)
         return x * pow(x * x, (e - 1) / 2);
 }
 
+inline float exp(float e)
+{
+    double r = 1;
+    double fact = 1;
+    double pow = 1;
+
+    if(e == 0) return r;
+    if(e == 1) return E;
+
+    // Taylor Series Expansion of Exponential Function
+    for(double i = 1; i <= 50; i += 1) {
+        fact *= i; pow *= e;
+        r += pow / fact;
+    }
+
+    return r;
+}
+
 inline float fast_log2(float val)
 {
     int * const exp_ptr = reinterpret_cast <int *> (&val);
