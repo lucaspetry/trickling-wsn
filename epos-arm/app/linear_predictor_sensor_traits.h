@@ -397,13 +397,15 @@ template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public
 {
     enum {LINEAR, MLP};
     
+    static const bool debugged = true;
     static const unsigned int ACC_MARGIN = 3;
-    static const unsigned int PREDICTOR = MLP;
+    static const unsigned int PREDICTOR = LINEAR;
     static const unsigned int SYNC_INTERVAL = 5;
 };
 
 template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
 {
+    static const bool debugged = true;
     static const unsigned int WINDOW_SIZE = 10;
     static const float LRATE;
     static const unsigned short GD_ITERATIONS = 100;
@@ -414,6 +416,7 @@ template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.0000005
 
 template <typename S> struct Traits<MLP_Predictor<S>>: public Traits<void>
 {
+    static const bool debugged = true;
     static const unsigned int HIDDEN_UNITS = 10;
     static const float HIDDEN_WEIGHTS[];
     static const float HIDDEN_BIASES[];

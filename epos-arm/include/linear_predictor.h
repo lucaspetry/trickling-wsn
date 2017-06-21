@@ -19,6 +19,7 @@ public:
     }
     
     Type predict_next(Type last_value) {
+        db<Linear_Predictor>(TRC) << "Linear_Predictor::predict_next(last_value=" << last_value << ")" << endl;
         Type next_value = _m * _t + _b;
 
         add_last_value(last_value);    

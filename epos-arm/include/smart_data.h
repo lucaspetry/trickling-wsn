@@ -208,6 +208,7 @@ public:
     
 protected:    
     virtual void send(const Time t, Time_Offset expiry) {
+        db<Smart_Data>(TRC) << "Smart_Data::send(t=" << t << ",expiry=" << expiry << ")" << endl;
         _time = t;
         _responsive->value(_value);
         _responsive->time(t);
@@ -217,12 +218,10 @@ protected:
 
 private:
     void update(TSTP::Observed * obs, int subject, TSTP::Buffer * buffer) {
-        OStream cout; // TODO(LUCAS)
         TSTP::Packet * packet = buffer->frame()->data<TSTP::Packet>();
         db<Smart_Data>(TRC) << "Smart_Data::update(obs=" << obs << ",cond=" << reinterpret_cast<void *>(subject) << ",data=" << packet << ")" << endl;
         switch(packet->type()) {
         case TSTP::INTEREST: {
-            cout << "TesteINTEREST\n"; // TODO(LUCAS)
             TSTP::Interest * interest = reinterpret_cast<TSTP::Interest *>(packet);
             db<Smart_Data>(INF) << "Smart_Data::update[I]:msg=" << interest << " => " << *interest << endl;
             _responsive->t0(interest->region().t0);
@@ -259,7 +258,6 @@ private:
                 _coordinates = response->origin();
                 _time = response->time();
                 db<Smart_Data>(INF) << "Smart_Data:update[R]:this=" << this << " => " << *this << endl;
-                cout << "notify() RESPONSE\n"; // TODO(LUCAS)
                 notify();
             }
         }
@@ -276,12 +274,10 @@ private:
     }
 
     void update(typename Transducer::Observed * obs) {
-            OStream cout; // TODO(LUCAS)
         _time = TSTP::now();
         Transducer::sense(_device, this);
         db<Smart_Data>(TRC) << "Smart_Data::update(this=" << this << ",exp=" << _expiry << ") => " << _value << endl;
         db<Smart_Data>(TRC) << "Smart_Data::update:responsive=" << _responsive << " => " << *reinterpret_cast<TSTP::Response *>(_responsive) << endl;
-        cout << "notify() UPDATE\n"; // TODO(LUCAS)
         notify();
         if(_responsive) {
             _responsive->value(_value);
@@ -291,7 +287,6 @@ private:
     }
 
     static int updater(unsigned int dev, Time_Offset expiry, Smart_Data * data) {
-        OStream cout; // TODO(LUCAS)
         do {
             Time t = TSTP::now();
 

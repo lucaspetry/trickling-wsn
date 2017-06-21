@@ -19,19 +19,18 @@ void TSTP::Locator::bootstrap()
   
     _confidence = 100;
 
-    OStream cout; // TODO(LUCAS)
     // This is used if your machine ID is unlisted below
     if(Traits<TSTP>::sink) {
-        _here = TSTP::sink(); cout << "\nSINK!\n"; // TODO(LUCAS)
+        _here = TSTP::sink();
     } else {
-        _here = Coordinates(1, 1, 1); cout << "\nNOT SINK!\n"; // TODO(LUCAS) // Adjust this value to the coordinates of the sensor
+        _here = Coordinates(1, 1, 1);
     }
 
     // You can edit the values below to define coordinates based on the machine ID
 //    if(!memcmp(Machine::id(), "\x01\x00H\x00\x00\x00\x00\x00\x00\x00\x00\xb7", 8)) { // Adjust this value to the ID of the mote
-//        _here = TSTP::sink(); cout << "\nSINK!\n"; // TODO(LUCAS)
+//        _here = TSTP::sink();
 //    } else if(!memcmp(Machine::id(), "\x01\x00H\x00\x00\x00\x00\x00\x00\x00\x00\xb7", 8)) { // Adjust this value to the ID of the mote
-//        _here = Coordinates(0.5,0.5,0); cout << "\nNOT SINK!\n"; // TODO(LUCAS) // Adjust this value to the coordinates of the sensor
+//        _here = Coordinates(0.5,0.5,0); // Adjust this value to the coordinates of the sensor
 //    }
 
     // For the Global Coordinates, Latitude, Longitude and z were taken from Google Maps,

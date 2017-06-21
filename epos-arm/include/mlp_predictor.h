@@ -15,6 +15,7 @@ public:
     MLP_Predictor() {}
     
     Type predict_next(Type last_value) {
+        db<MLP_Predictor>(TRC) << "MLP_Predictor::predict_next(last_value=" << last_value << ")" << endl;
     	// Compute hidden units
 	    float outputHiddenLayer[HIDDEN_UNITS];
 	    for(unsigned int i = 0; i < HIDDEN_UNITS; i++) {
@@ -32,10 +33,10 @@ public:
 
 private:
 	float hiddenActivationFunction(float sum) { // Sigmoidal function
-		return 1/(1+pow<float>(E, -sum)); // TODO(LUCAS) - Função pow só usa inteiros
+		return 1 / (1 + exp(-sum));
 	}
 
-	float outputActivationFunction(float sum) { // Identity function
+	inline float outputActivationFunction(float sum) { // Identity function
 		return sum;
 	}
 

@@ -76,7 +76,7 @@ inline T pow(const T & x, unsigned int e)
         return x * pow(x * x, (e - 1) / 2);
 }
 
-inline float exp(float e)
+inline double exp(float e)
 {
     double r = 1;
     double fact = 1;
