@@ -20,7 +20,7 @@ public:
 	    float outputHiddenLayer[HIDDEN_UNITS];
 	    for(unsigned int i = 0; i < HIDDEN_UNITS; i++) {
 	   		float sum = last_value * HIDDEN_WEIGHTS[i] + HIDDEN_BIASES[i];
-	     	outputHiddenLayer[i] = hiddenActivationFunction(sum);
+	     	outputHiddenLayer[i] = hidden_activation_function(sum);
 	    }
 
 	    // Compute output unit
@@ -28,15 +28,15 @@ public:
 	    for(unsigned int i = 0; i < HIDDEN_UNITS; i++) {
 	      sumOutputLayer += outputHiddenLayer[i] * OUTPUT_WEIGHTS[i];
 	    }
-	    return outputActivationFunction(sumOutputLayer);
+	    return output_activation_function(sumOutputLayer);
     }
 
 private:
-	float hiddenActivationFunction(float sum) { // Sigmoidal function
+	float hidden_activation_function(float sum) { // Sigmoidal function
 		return 1 / (1 + exp(-sum));
 	}
 
-	inline float outputActivationFunction(float sum) { // Identity function
+	inline float output_activation_function(float sum) { // Identity function
 		return sum;
 	}
 

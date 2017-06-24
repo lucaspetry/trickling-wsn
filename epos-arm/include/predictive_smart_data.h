@@ -117,7 +117,6 @@ private:
     Value _last_value;
     unsigned int _sync_interval;
     bool _trusty;
-    EPOS::OStream cout;
   
 };
 

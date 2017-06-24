@@ -73,8 +73,8 @@ private:
     Type _data_window[WINDOW_SIZE];
     unsigned int _current_idx;
     unsigned long _t;
-    unsigned short _m;
-    unsigned short _b;
+    float _m;
+    float _b;
     
 };
 

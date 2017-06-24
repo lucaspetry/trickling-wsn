@@ -12,8 +12,8 @@ int main()
     cout << "Temperature Sensor\n" << endl;
     cout << "[ SENSOR ]  " << TSTP::now() << "  Pass: Initializing..." << endl;
 
-    Temperature_Sensor sensor;
-    Predictive_Smart_Data<Temperature_Sensor> data(0, 100000000);
+    Stub_Sensor sensor;
+    Predictive_Smart_Data<Stub_Sensor> data(0, 100000000);
     cout << "[ SENSOR ]  " << TSTP::now() << "  Pass: Sensor" << endl;
     cout << "[ SENSOR ]  " << TSTP::now() << "  Location at: " << data.location() << endl;
   

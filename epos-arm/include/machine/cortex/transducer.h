@@ -362,6 +362,45 @@ private:
     static RFID_Sensor * _dev[MAX_DEVICES];
 };
 
+class Stub_Sensor // TODO
+{
+public:
+    static const unsigned int UNIT = TSTP::Unit::Temperature;
+    static const unsigned int NUM = TSTP::Unit::F32;
+    static const int ERROR = 0; // Unknown
+
+    static const bool INTERRUPT = false;
+    static const bool POLLING = true;
+
+    static unsigned int IDX;
+    static const unsigned int SIZE;
+    static const float DATA[];
+
+    typedef _UTIL::Observer Observer;
+    typedef _UTIL::Observed Observed;
+
+public:
+    Stub_Sensor() {}
+
+    static void sense(unsigned int dev, Smart_Data<Stub_Sensor> * data) {
+        data->_value = DATA[IDX % SIZE];
+        IDX++;
+    }
+
+    static void actuate(unsigned int dev, Smart_Data<Stub_Sensor> * data, const Smart_Data<Stub_Sensor>::Value & command) {}
+
+    static void attach(Observer * obs) { _observed.attach(obs); }
+    static void detach(Observer * obs) { _observed.detach(obs); }
+
+private:
+    static bool notify() { return _observed.notify(); }
+
+    static void init();
+
+private:
+    static Observed _observed;
+};
+
 typedef Smart_Data<Current_Sensor> Current;
 typedef Smart_Data<ADC_Sensor> Luminous_Intensity;
 typedef Smart_Data<Temperature_Sensor> Temperature;

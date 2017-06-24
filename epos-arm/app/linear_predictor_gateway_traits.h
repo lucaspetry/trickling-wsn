@@ -40,7 +40,7 @@ template<> struct Traits<Debug>
     static const bool error   = false;
     static const bool warning = false;
     static const bool info    = true;
-    static const bool trace   = true;
+    static const bool trace   = false;
 };
 
 template<> struct Traits<Lists>: public Traits<void>
@@ -398,7 +398,7 @@ template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public
     enum {LINEAR, MLP};
     
     static const bool debugged = true;
-    static const unsigned int ACC_MARGIN = 3;
+    static const unsigned int ACC_MARGIN = 8;
     static const unsigned int PREDICTOR = LINEAR;
     static const unsigned int SYNC_INTERVAL = 5;
 };
@@ -406,13 +406,13 @@ template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public
 template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
 {
     static const bool debugged = true;
-    static const unsigned int WINDOW_SIZE = 10;
+    static const unsigned int WINDOW_SIZE = 30;
     static const float LRATE;
-    static const unsigned short GD_ITERATIONS = 100;
+    static const unsigned short GD_ITERATIONS = 200;
     static const unsigned short M = 0;
-    static const unsigned short B = 150;
+    static const unsigned short B = 0;
 };
-template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.0000005f;
+template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.000000001f;
 
 template <typename S> struct Traits<MLP_Predictor<S>>: public Traits<void>
 {

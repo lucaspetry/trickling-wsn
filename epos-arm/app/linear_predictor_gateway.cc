@@ -19,7 +19,7 @@ int main()
     cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Region" << endl;
 
     // Data of interest
-    Predictive_Smart_Data<Temperature_Sensor> data(region_temp, DATA_PERIOD);
+    Predictive_Smart_Data<Stub_Sensor> data(region_temp, DATA_PERIOD);
     cout << "[ GATEWAY ]  " << TSTP::now() << "  Pass: Interest" << endl;
     cout << "[ GATEWAY ]  " << TSTP::now() << "  Location at: " << data.location() << endl;
 
