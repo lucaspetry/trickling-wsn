@@ -1,5 +1,5 @@
-#ifndef ELMAN_PREDICTOR_HPP_
-#define ELMAN_PREDICTOR_HPP_
+#ifndef MLP_PREDICTOR_HPP_
+#define MLP_PREDICTOR_HPP_
 
 #include "predictor.hpp"
 #include <array>
@@ -7,7 +7,7 @@
 
 
 template<class Type, unsigned short HIDDEN_UNITS>
-class ElmanPredictor : public Predictor<Type> {
+class MLPPredictor : public Predictor<Type> {
 
 using array = std::array<float, HIDDEN_UNITS>;
 
@@ -17,14 +17,14 @@ private:
   array _wHiddenLayer; // pesos saindo de cada item da hidden layer para o nodo de saida
   float _biasHidden; // bias entrando na output layer, junto com a hidden layer
 public:
-  ElmanPredictor(array wInput, array biasInput, array wHiddenLayer, float biasHidden) {
+  MLPPredictor(array wInput, array biasInput, array wHiddenLayer, float biasHidden) {
         _wInput = wInput;
         _biasInput = biasInput;
         _wHiddenLayer = wHiddenLayer;
         _biasHidden = biasHidden;
     }
 
-  ~ElmanPredictor() { }
+  ~MLPPredictor() { }
 
   Type predictNext(Type lastValue) {
 
@@ -56,4 +56,4 @@ public:
   }
 };
 
-#endif // ELMAN_PREDICTOR_HPP_
+#endif // MLP_PREDICTOR_HPP_

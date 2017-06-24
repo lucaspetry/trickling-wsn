@@ -1,5 +1,5 @@
 #include <iostream>
-#include "elman_predictor.hpp"
+#include "mlp_predictor.hpp"
 
 #define HIDDEN_UNITS 10
 
@@ -11,8 +11,8 @@ int main(int argc, char* argv[]) {
 	array wHiddenLayer = {-100.49376615084962, 310.5412945448763, 150.7703311448052, -283.4631794552904, 44.624188325957334, -461.8087253259369, -104.75030772623073, 581.4739282887996, 57.785730881542875, 153.70981416879079};
 	float biasHidden = 469.75173680544657;
 
- 	auto predictor = new ElmanPredictor<float, HIDDEN_UNITS>(wInput, biasInput, wHiddenLayer, biasHidden);
+ 	auto predictor = new MLPPredictor<float, HIDDEN_UNITS>(wInput, biasInput, wHiddenLayer, biasHidden);
  	std::cout << "Valor: "<< predictor->predictNext(368) << std::endl;
 
-  return 0;
+  	return 0;
 }

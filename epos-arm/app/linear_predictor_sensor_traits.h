@@ -400,7 +400,7 @@ template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public
     static const bool debugged = true;
     static const unsigned int ACC_MARGIN = 8;
     static const unsigned int PREDICTOR = LINEAR;
-    static const unsigned int SYNC_INTERVAL = 5;
+    static const unsigned int SYNC_INTERVAL = 3;
 };
 
 template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
@@ -409,8 +409,8 @@ template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
     static const unsigned int WINDOW_SIZE = 30;
     static const float LRATE;
     static const unsigned short GD_ITERATIONS = 200;
-    static const unsigned short M = 1;
-    static const unsigned short B = 6;
+    static const unsigned short M = 0;
+    static const unsigned short B = 10;
 };
 template <typename S> const float Traits<Linear_Predictor<S>>::LRATE = 0.000000001f;
 

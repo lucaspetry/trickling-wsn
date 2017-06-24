@@ -10,14 +10,14 @@ private:
   Type *_dataWindow;
   unsigned int _dataPoints;
   unsigned int _currentIndex;
-  float _learningRate;
+  double _learningRate;
   short _gradientIterations;
-  float _m;
-  float _b;
+  double _m;
+  double _b;
   unsigned long _t;
 
 public:
-  LinearPredictor(unsigned int dataPoints = 50, float learningRate = 0.001, short gradientIterations = 1000, float m = 0, float b = 0) {
+  LinearPredictor(unsigned int dataPoints = 50, double learningRate = 0.001, short gradientIterations = 1000, double m = 0, double b = 0) {
     _dataPoints = dataPoints;
     _dataWindow = new Type[dataPoints];
     _currentIndex = 0;
@@ -53,30 +53,28 @@ protected:
   }
   
   void updateCoefficients() {
-    float b = _b;
-    float m = _m;
+    double m = _m;
+    double b = _b;
 
-    int N = _currentIndex;
-
+    double N = _currentIndex;
     for(int i = 0; i < _gradientIterations; i++) {
-      float b_gradient = 0;
-      float m_gradient = 0;
+      double m_gradient = 0;
+      double b_gradient = 0;
      
       for(int j = 0; j < _currentIndex; j++) {
         int x = _t - _currentIndex + j;
-        float y = _dataWindow[j];
+        double y = _dataWindow[j];
 
         m_gradient += -(2.0/N) * x * (y - ((m * x) + b));
         b_gradient += -(2.0/N) * (y - ((m * x) + b));
-        
       }
 
       m = m - (_learningRate * m_gradient);
       b = b - (_learningRate * b_gradient);
     }
 
-    _b = b;
     _m = m;
+    _b = b;
   }  
 };
 

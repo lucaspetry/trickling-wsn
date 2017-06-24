@@ -99,6 +99,7 @@ int main(int argc, char* argv[]) {
   unsigned int points = 0;
   unsigned int hits = 0;
   float mean = 0;
+  unsigned int firstHit = 0;
   
   while(getline(input, line)) {
     float dataPoint = strtof(line.c_str(), 0);
@@ -116,6 +117,9 @@ int main(int argc, char* argv[]) {
       lastValue = predicted;
     else
       lastValue = dataPoint;
+
+    if(firstHit == 0 && hit == 1)
+      firstHit = points;
   }
   
   mean = mean/points;
@@ -124,7 +128,8 @@ int main(int argc, char* argv[]) {
   float hitsPerc = ((float) hits / (float) points) * 100;
   
   std::cout << "Predictor Hits: " << hitsPerc << "% (" << hits << "/" << points << ")" << std::endl;
-  std::cout << "\"Error\" Mean:   " << mean << "\n" << std::endl;
+  std::cout << "Mean of Error:  " << mean << std::endl;
+  std::cout << "First Hit:      Element #" << firstHit << "\n" << std::endl;
 
   // Clean-up
   input.close();
