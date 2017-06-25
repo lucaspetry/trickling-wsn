@@ -16,17 +16,36 @@ private:
   array _biasInput; // bias entrando na hidden layer, junto com o nodo de entrada
   array _wHiddenLayer; // pesos saindo de cada item da hidden layer para o nodo de saida
   float _biasHidden; // bias entrando na output layer, junto com a hidden layer
+
+  bool _isNormalized;
+  Type _trainingMin;
+  Type _trainingMax;
 public:
-  MLPPredictor(array wInput, array biasInput, array wHiddenLayer, float biasHidden) {
+  MLPPredictor(array wInput, array biasInput, array wHiddenLayer, float biasHidden, bool isNormalized = false, Type trainingMin = 0, Type trainingMax = 0) {
         _wInput = wInput;
         _biasInput = biasInput;
         _wHiddenLayer = wHiddenLayer;
         _biasHidden = biasHidden;
+
+        _isNormalized = isNormalized;
+        _trainingMin = trainingMin;
+        _trainingMax = trainingMax;
     }
 
   ~MLPPredictor() { }
 
+  Type normalize(Type nonNormalizedValue) {
+    return (nonNormalizedValue - _trainingMin) / (_trainingMax - _trainingMin);
+  }
+
+  Type denormalize(Type normalizedValue) {
+    return normalizedValue * (_trainingMax - _trainingMin) + _trainingMin;
+  }
+
   Type predictNext(Type lastValue) {
+    if(_isNormalized) {
+      lastValue = normalize(lastValue);
+    }
 
   	// multiplica a entrada pelos pesos de entrada e soma com o bias
   	// para cada um dos N neuronios intermediarios
@@ -44,7 +63,13 @@ public:
       sumOutputLayer += outputHiddenLayer[i] * _wHiddenLayer[i];
     }
 
-    return outputActivationFunction(sumOutputLayer);
+    Type output = outputActivationFunction(sumOutputLayer);
+
+    if(_isNormalized) {
+      output = denormalize(output);
+    }
+
+    return output;
   }
 
   float activationFunction(float summation) {
