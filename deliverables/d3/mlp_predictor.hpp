@@ -34,11 +34,11 @@ public:
 
   ~MLPPredictor() { }
 
-  Type normalize(Type nonNormalizedValue) {
+  inline Type normalize(Type nonNormalizedValue) {
     return (nonNormalizedValue - _trainingMin) / (_trainingMax - _trainingMin);
   }
 
-  Type denormalize(Type normalizedValue) {
+  inline Type denormalize(Type normalizedValue) {
     return normalizedValue * (_trainingMax - _trainingMin) + _trainingMin;
   }
 
@@ -76,7 +76,7 @@ public:
     return 1/(1+exp(-summation));
   }
 
-  float outputActivationFunction(float summation) {
+  inline float outputActivationFunction(float summation) {
     return summation;
   }
 };
