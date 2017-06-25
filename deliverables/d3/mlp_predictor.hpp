@@ -71,12 +71,11 @@ public:
   	// e passa pela função de ativação
     double outputHiddenLayer[HIDDEN_UNITS];
     for(int i = 0; i < HIDDEN_UNITS; i++) {
-      double sum = 0;
+      double sum = _biasInput[i];
       for(int j = 0; j < INPUTS; j++) {
           sum += _lastInputs[j] * _wInput[i][j];
       }
 
-   		sum += _biasInput[i];
      	outputHiddenLayer[i] = activationFunction(sum);
     }
 

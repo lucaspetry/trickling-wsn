@@ -11,7 +11,7 @@ int main()
 {
     OStream cout;
     cout << "\n\n\n=======================   GATEWAY START   =======================" << endl;
-    cout << "[ GATEWAY ]    Initializing..." << endl;
+    cout << "[ GATEWAY ]    Linear Predictor - Initializing..." << endl;
   
     // Region of interest (Temperature Sensor)
     TSTP::Time start = TSTP::now();

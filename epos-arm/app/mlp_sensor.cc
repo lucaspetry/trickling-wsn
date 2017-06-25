@@ -10,7 +10,7 @@ int main()
 {
     OStream cout;
     cout << "\n\n\n========================   SENSOR START   =======================" << endl;
-    cout << "[ SENSOR ]    Initializing..." << endl;
+    cout << "[ SENSOR ]    MLP Predictor - Initializing..." << endl;
 
     Stub_Sensor sensor;
     Predictive_Smart_Data<Stub_Sensor> data(0, 100000000);
