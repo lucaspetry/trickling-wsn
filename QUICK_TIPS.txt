@@ -6,3 +6,9 @@ $ dmesg | grep tty
 
 Get device ttyACM0 output
 minicom -D /dev/ttyACM0
+
+=============================================================
+                   TO-DO PRESENTATION
+=============================================================
+EXAMPLE FILE: epos-arm/tools/eposiotgw/eposiotgw
+https://stackoverflow.com/questions/11874767/real-time-plotting-in-while-loop-with-matplotlib
