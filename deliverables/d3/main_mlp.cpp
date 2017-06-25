@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "mlp_predictor.hpp"
 
 #define HIDDEN_UNITS 5
@@ -26,12 +27,12 @@ int main(int argc, char* argv[]) {
  																	biasHidden, false, minValue, maxValue);
 
  	double inputs[] = {0.257763975155280, 0.170807453416149, 0.170807453416149, 0.170807453416149, 0.136645962732919, 0.155279503105590, 0.0838509316770187, 0.257763975155280, 0.239130434782609, 0.239130434782609};
- 	double expect[] = {0.170807453416149, 0.170807453416149, 0.170807453416149, 0.136645962732919, 0.155279503105590, 0.0838509316770187, 0.257763975155280, 0.239130434782609, 0.239130434782609, 0.239130434782609};
+ 	double expect[] = {0.257418744520037, 0.222724019619266, 0.148659675182724, 0.203811870051849, 0.192961232486735, 0.172784418012053, 0.191658855433564, 0.196206471336936, 0.335234403189946, 0.233541590086761};
 	
 	std::cout << "Matlab\t\tOutput\n" << std::endl;
- 	for(int i = 0; i < 11; i++) {
+ 	for(int i = 0; i < 10; i++) {
  		double lastValue = predictor->predictNext(inputs[i]);
- 		std::cout << expect[i] << "\t\t" << lastValue << std::endl;
+ 		std::cout << std::setprecision(5) << expect[i] << "\t\t" << lastValue << std::endl;
  	}
 
   	return 0;
