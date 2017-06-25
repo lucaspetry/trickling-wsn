@@ -44,7 +44,7 @@ public:
     operator Value() {
         db<Predictive_Smart_Data>(TRC) << "Predictive_Smart_Data::Value()" << endl;
         Value predicted;
-        if(Smart_Data<Transducer>::_mode != Smart_Data<Transducer>::ADVERTISED) { // TODO(LUCAS) - Verificar com Cesar
+        if(Smart_Data<Transducer>::_device == Smart_Data<Transducer>::REMOTE) { // If it's not sensor-side
             predicted = _predictor->predict_next(_last_value);
             db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value[!ADV]:predicted=" << predicted << endl;
         }
@@ -60,16 +60,20 @@ public:
                     _trusty = false;
                 }
                 if(_sync_interval > 0) _sync_interval--;
-
-                db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_sync_interval=" << _sync_interval << endl;
             }
         } else {
-            _sync_interval = P_Traits::SYNC_INTERVAL;
             _last_value = Smart_Data<Transducer>::_value;
+
+            if(Smart_Data<Transducer>::_device == Smart_Data<Transducer>::REMOTE) // If it's not sensor-side
+                _sync_interval = P_Traits::SYNC_INTERVAL;
         }
         
-        db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_last_value=" << _last_value << endl;
-        db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_trusty=" << _trusty << endl;
+        if(Smart_Data<Transducer>::_device == Smart_Data<Transducer>::REMOTE) {
+            db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::send():received=" << (!Smart_Data<Transducer>::expired()) << endl;
+            db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_last_value=" << _last_value << endl;
+            db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_sync_interval=" << _sync_interval << endl;
+            db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_trusty=" << _trusty << endl;
+        }
 
         Value ret = _last_value;
         if(Smart_Data<Transducer>::_mode & Smart_Data<Transducer>::CUMULATIVE) {
@@ -94,8 +98,10 @@ protected:
         bool acc_add_margin = predicted <= real * (1 + _acc_margin);
         bool check_sync = _sync_interval > 0 || P_Traits::SYNC_INTERVAL == 0;
 
+        db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::send():hit=" << (acc_dec_margin && acc_add_margin) << endl;
+
         // If predicted data is acceptable do not notify observers
-        if( acc_dec_margin && acc_add_margin && check_sync) {
+        if(acc_dec_margin && acc_add_margin && check_sync) {
             _last_value = predicted;
             _sync_interval--;
         } else {

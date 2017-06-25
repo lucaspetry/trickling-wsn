@@ -400,7 +400,7 @@ template<> template <typename S> struct Traits<Predictive_Smart_Data<S>>: public
     static const bool debugged = true;
     static const unsigned int ACC_MARGIN = 8;
     static const unsigned int PREDICTOR = LINEAR;
-    static const unsigned int SYNC_INTERVAL = 3;
+    static const unsigned int SYNC_INTERVAL = 2;
 };
 
 template <typename S> struct Traits<Linear_Predictor<S>>: public Traits<void>
