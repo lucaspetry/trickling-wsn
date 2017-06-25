@@ -53,7 +53,8 @@ hold on;
 plot(Saida(1:DataPoints) * (maxX1 - minX1) + minX1);
 
 % Get network weights
-N_Iw = cell2mat(net.IW)
-N_b1  = cell2mat(net.b(1))
-N_Lw = cell2mat(net.Lw)
-N_b2 = cell2mat(net.b(2))
+format long;
+N_Iw = cell2mat(net.IW);
+N_b1  = cell2mat(net.b(1));
+N_Lw = cell2mat(net.Lw);
+N_b2 = cell2mat(net.b(2));
