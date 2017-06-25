@@ -38,7 +38,7 @@ public:
         _currentIndex = 0;
 
         for(int i = 0; i < INPUTS; i++)
-          _lastInputs[i] = 0.2578; // TODO(LUCAS) - Only for test purposes
+          _lastInputs[i] = 0.257763975155280; // TODO(LUCAS) - Only for test purposes
     }
 
   ~MLPPredictor() { }
