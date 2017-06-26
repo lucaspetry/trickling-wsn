@@ -116,7 +116,8 @@ protected:
     
 private:
     typedef Traits<Predictive_Smart_Data<Transducer>> P_Traits;
-    typedef typename IF<(P_Traits::PREDICTOR == P_Traits::LINEAR), Linear_Predictor<Value>, MLP_Predictor<Value>>::Result P_Type;
+    typedef typename IF<(P_Traits::PREDICTOR == P_Traits::LINEAR), 
+                Linear_Predictor<Value>, MLP_Predictor<Value>>::Result P_Type;
 
     Predictor<Value> * _predictor;
     float _acc_margin;

@@ -15,7 +15,7 @@ class MLP_Predictor: public Predictor<Type>
 public:
     MLP_Predictor() {
         for(unsigned int i = 0; i < PT::LAG_INPUTS; i++)
-            _lag_inputs[i] = 0.257763975155280;
+            _lag_inputs[i] = 0.0;
     }
     
     Type predict_next(Type last_value) {
