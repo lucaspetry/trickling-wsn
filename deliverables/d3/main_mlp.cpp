@@ -6,8 +6,8 @@
 #define HIDDEN_UNITS 5
 #define INPUTS 3
 
-using arrayInput = std::array<double, INPUTS>;
-using array = std::array<double, HIDDEN_UNITS>;
+using arrayInput = std::array<float, INPUTS>;
+using array = std::array<float, HIDDEN_UNITS>;
 using matrix = std::array<arrayInput, HIDDEN_UNITS>;
 
 void printUsage() {
@@ -26,10 +26,10 @@ int main(int argc, char* argv[]) {
 	wInput[4] = {3.03422058199185, 3.26105843183883, -1.58422262880005};
 	array biasInput = {4.83983182011767, 2.25770237433247, -0.267896160836834, -2.39151299799297, 4.83391715868682};
 	array wHiddenLayer = {-0.412420967808636, 0.896218844051993, 0.664567894352862, -0.189001779575074, -0.521224580849148};
-	double biasHidden = -0.144331309491435;
+	float biasHidden = -0.144331309491435;
 
-	double minValue = 1.7;
-	double maxValue = 33.9;
+	float minValue = 1.7;
+	float maxValue = 33.9;
 
 	if (argc < 5) {
 	  printUsage();
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
 	std::cout << "> Output File:       " << outputFile << std::endl;
 	std::cout << "> Acceptance Margin: " << accMargin << std::endl;
 
-	auto predictor = new MLPPredictor<double, INPUTS, HIDDEN_UNITS>(wInput, biasInput, wHiddenLayer,
+	auto predictor = new MLPPredictor<float, INPUTS, HIDDEN_UNITS>(wInput, biasInput, wHiddenLayer,
 																		biasHidden, true, minValue, maxValue);
 
 	std::ifstream input(inputFile.c_str());

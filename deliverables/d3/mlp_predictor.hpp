@@ -8,8 +8,8 @@
 template<class Type, unsigned short INPUTS, unsigned short HIDDEN_UNITS>
 class MLPPredictor : public Predictor<Type> {
 
-using arrayInput = std::array<double, INPUTS>;
-using array = std::array<double, HIDDEN_UNITS>;
+using arrayInput = std::array<float, INPUTS>;
+using array = std::array<float, HIDDEN_UNITS>;
 using matrix = std::array<arrayInput, HIDDEN_UNITS>;
 
 private:
@@ -17,7 +17,7 @@ private:
   matrix _wInput; // pesos saindo do nodo de entrada para a hidden layer
   array _biasInput; // bias entrando na hidden layer, junto com o nodo de entrada
   array _wHiddenLayer; // pesos saindo de cada item da hidden layer para o nodo de saida
-  double _biasHidden; // bias entrando na output layer, junto com a hidden layer
+  float _biasHidden; // bias entrando na output layer, junto com a hidden layer
 
   bool _isNormalized;
   Type _trainingMin;
@@ -25,7 +25,7 @@ private:
   unsigned int _currentIndex;
 
 public:
-  MLPPredictor(matrix wInput, array biasInput, array wHiddenLayer, double biasHidden, bool isNormalized = false, Type trainingMin = 0, Type trainingMax = 0) {
+  MLPPredictor(matrix wInput, array biasInput, array wHiddenLayer, float biasHidden, bool isNormalized = false, Type trainingMin = 0, Type trainingMax = 0) {
         _wInput = wInput;
         _biasInput = biasInput;
         _wHiddenLayer = wHiddenLayer;
@@ -38,7 +38,7 @@ public:
         _currentIndex = 0;
 
         for(int i = 0; i < INPUTS; i++)
-          _lastInputs[i] = 0.257763975155280; // TODO(LUCAS) - Only for test purposes
+          _lastInputs[i] = 0;
     }
 
   ~MLPPredictor() { }
@@ -69,9 +69,9 @@ public:
   	// multiplica a entrada pelos pesos de entrada e soma com o bias
   	// para cada um dos N neuronios intermediarios
   	// e passa pela função de ativação
-    double outputHiddenLayer[HIDDEN_UNITS];
+    float outputHiddenLayer[HIDDEN_UNITS];
     for(int i = 0; i < HIDDEN_UNITS; i++) {
-      double sum = _biasInput[i];
+      float sum = _biasInput[i];
       for(int j = 0; j < INPUTS; j++) {
           sum += _lastInputs[j] * _wInput[i][j];
       }
@@ -80,7 +80,7 @@ public:
     }
 
     //multiplica e soma os valores no nodo de saida
-    double sumOutputLayer = _biasHidden;
+    float sumOutputLayer = _biasHidden;
     for(int i = 0; i < HIDDEN_UNITS; i++) {
       sumOutputLayer += outputHiddenLayer[i] * _wHiddenLayer[i];
     }
@@ -90,11 +90,11 @@ public:
     return output;
   }
 
-  double activationFunction(double summation) {
+  float activationFunction(float summation) {
     return 1/(1+exp(-summation));
   }
 
-  inline double outputActivationFunction(double summation) {
+  inline float outputActivationFunction(float summation) {
     return summation;
   }
 };

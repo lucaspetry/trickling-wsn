@@ -1,7 +1,7 @@
 ##############################
 #       Test Stats Plot      #
 ##############################
-data <- read.csv("../data/data1_results.txt", header=TRUE)
+data <- read.csv("../data/data1_mlp_results.txt", header=TRUE)
 
 png("data1_plot.png", width=1000, height=625)
 
@@ -9,7 +9,7 @@ colorReal <- "darkgreen"
 colorPredicted <- "orange"
 colorDiff <- "red"
 
-numberPoints <- length(data[, 1])
+numberPoints <- 5000 #length(data[, 1])
 realValues <- head(data[, 1], n=numberPoints)
 predictedValues <- head(data[, 2], n=numberPoints)
 diffValues <- head(data[, 3], n=numberPoints)
