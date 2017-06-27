@@ -14,11 +14,11 @@ public:
     Linear_Predictor() {
         _current_idx = 0;
         _t = 0;
-        _m = Traits<Linear_Predictor<Type>>::M;
-        _b = Traits<Linear_Predictor<Type>>::B;
+        _m = PT::M;
+        _b = PT::B;
     }
     
-    Type predict_next(Type last_value) {
+    Type predict_next(Type last_value, bool is_real = false) {
         db<Linear_Predictor>(TRC) << "Linear_Predictor::predict_next(last_value=" << last_value << ")" << endl;
         Type next_value = _m * _t + _b;
 
@@ -31,11 +31,12 @@ public:
     
 private:
     void add_last_value(Type last_value) {
-        if(_current_idx >= WINDOW_SIZE) {
-            for(unsigned int i = 1; i < WINDOW_SIZE; i++)
+        if(_current_idx >= PT::WINDOW_SIZE) {
+            for(unsigned int i = 1; i < PT::WINDOW_SIZE; i++) {
                 _data_window[i - 1] = _data_window[i];
+            }
 
-            _current_idx = WINDOW_SIZE - 1;
+            _current_idx = PT::WINDOW_SIZE - 1;
         }
 
         _data_window[_current_idx++] = last_value;
@@ -58,8 +59,8 @@ private:
 
             }
 
-            m = m - (LRATE * m_gradient);
-            b = b - (LRATE * b_gradient);
+            m = m - (PT::LRATE * m_gradient);
+            b = b - (PT::LRATE * b_gradient);
         }
 
         _m = m;
@@ -67,10 +68,8 @@ private:
     }
   
 private:
-    static const unsigned int WINDOW_SIZE = Traits<Linear_Predictor<Type>>::WINDOW_SIZE;
-    static const float LRATE = Traits<Linear_Predictor<Type>>::LRATE;
-    static const unsigned short GD_ITERATIONS = Traits<Linear_Predictor<Type>>::GD_ITERATIONS;
-    Type _data_window[WINDOW_SIZE];
+    typedef Traits<Linear_Predictor<Type>> PT;
+    float _data_window[PT::WINDOW_SIZE];
     unsigned int _current_idx;
     unsigned long _t;
     float _m;

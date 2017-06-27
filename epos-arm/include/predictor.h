@@ -9,7 +9,8 @@ template<typename Type>
 class Predictor
 {
 public:
-    virtual Type predict_next(Type last_value) = 0;
+    virtual Type predict_next(Type last_value, bool is_real = false) = 0;
+    virtual bool reliable() { return false; };
 };
 
 __END_SYS

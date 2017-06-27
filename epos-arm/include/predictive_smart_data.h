@@ -27,25 +27,25 @@ public:
 public:
     Predictive_Smart_Data(unsigned int dev, const Microsecond & expiry)
     : Smart_Data<Transducer>(dev, expiry, Smart_Data<Transducer>::ADVERTISED),
-    _predictor(new P_Type()), _acc_margin(P_Traits::ACC_MARGIN / (float) 100), 
-    _last_value(0), _sync_interval(P_Traits::SYNC_INTERVAL), _trusty(true) {
+    _predictor(new P_Type()), _acc_margin(PT::ACC_MARGIN / (float) 100),
+    _last_value(0), _last_value_real(false), _sync_interval(PT::SYNC_INTERVAL),_trusty(true) {
         db<Predictive_Smart_Data>(TRC) << "Predictive_Smart_Data(dev=" << dev << ",expiry=" << expiry << ")" << endl;
-        assert(P_Traits::ACC_MARGIN >= 0 && P_Traits::ACC_MARGIN <= 100);
+        assert(PT::ACC_MARGIN >= 0 && PT::ACC_MARGIN <= 100);
     }
     
     Predictive_Smart_Data(const Region & region, const Microsecond & period = 0, const Mode & mode = Mode::PRIVATE)
     : Smart_Data<Transducer>(region, period, period, mode),
-    _predictor(new P_Type()), _acc_margin(P_Traits::ACC_MARGIN / (float) 100),
-    _last_value(0), _sync_interval(P_Traits::SYNC_INTERVAL), _trusty(true) {
+    _predictor(new P_Type()), _acc_margin(PT::ACC_MARGIN / (float) 100),
+    _last_value(0), _last_value_real(false), _sync_interval(PT::SYNC_INTERVAL), _trusty(true) {
         db<Predictive_Smart_Data>(TRC) << "Predictive_Smart_Data(region=" << region << ",period=" << period << ",mode=" << mode << ")" << endl;
-        assert(P_Traits::ACC_MARGIN >= 0 && P_Traits::ACC_MARGIN <= 100);
+        assert(PT::ACC_MARGIN >= 0 && PT::ACC_MARGIN <= 100);
     }
         
     operator Value() {
         db<Predictive_Smart_Data>(TRC) << "Predictive_Smart_Data::Value()" << endl;
         Value predicted;
         if(Smart_Data<Transducer>::_device == Smart_Data<Transducer>::REMOTE) { // If it's not sensor-side
-            predicted = _predictor->predict_next(_last_value);
+            predicted = _predictor->predict_next(_last_value, _last_value_real);
             db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value[!ADV]:predicted=" << predicted << endl;
         }
         
@@ -55,24 +55,30 @@ public:
                 Smart_Data<Transducer>::_time = TSTP::now();
             } else {
                 _last_value = predicted;
-                
-                if(P_Traits::SYNC_INTERVAL != 0 && _sync_interval == 0) {
+                _last_value_real = false;
+
+                if(PT::SYNC_INTERVAL != 0 && _sync_interval == 0) {
                     _trusty = false;
                 }
+
                 if(_sync_interval > 0) _sync_interval--;
             }
         } else {
             _last_value = Smart_Data<Transducer>::_value;
-
+            _last_value_real = true;
             if(Smart_Data<Transducer>::_device == Smart_Data<Transducer>::REMOTE) // If it's not sensor-side
-                _sync_interval = P_Traits::SYNC_INTERVAL;
+                _sync_interval = PT::SYNC_INTERVAL;
         }
         
+        if(!_trusty) {
+            _trusty = _predictor->reliable();
+        }
+
         if(Smart_Data<Transducer>::_device == Smart_Data<Transducer>::REMOTE) {
             db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::send():received=" << (!Smart_Data<Transducer>::expired()) << endl;
             db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_last_value=" << _last_value << endl;
             db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_sync_interval=" << _sync_interval << endl;
-            db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_trusty=" << _trusty << endl;
+            db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::Value():_trusty=" << trusty() << endl;
         }
 
         Value ret = _last_value;
@@ -83,12 +89,20 @@ public:
         return ret;
     }
 
-    bool trusty() { return _trusty; }
+    bool trusty() {
+        if(Smart_Data<Transducer>::_device == Smart_Data<Transducer>::REMOTE) {
+            return _trusty;
+        } else {
+            // sensor always is trustful
+            return true;
+        }
+    }
+
     
 protected:    
     void send(const Time t, Time_Offset expiry) {
         db<Predictive_Smart_Data>(TRC) << "Predictive_Smart_Data::send(t=" << t << ",expiry=" << expiry << ")" << endl;
-        Value predicted = _predictor->predict_next(_last_value);
+        Value predicted = _predictor->predict_next(_last_value, _last_value_real);
         Value real = Smart_Data<Transducer>::_value;
         
         db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::send():real=" << real << endl;
@@ -96,18 +110,21 @@ protected:
         
         bool acc_dec_margin = predicted >= real * (1 - _acc_margin);
         bool acc_add_margin = predicted <= real * (1 + _acc_margin);
-        bool check_sync = _sync_interval > 0 || P_Traits::SYNC_INTERVAL == 0;
+        bool check_sync = _sync_interval > 0 || PT::SYNC_INTERVAL == 0;
 
         db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::send():hit=" << (acc_dec_margin && acc_add_margin) << endl;
 
         // If predicted data is acceptable do not notify observers
         if(acc_dec_margin && acc_add_margin && check_sync) {
             _last_value = predicted;
+            _last_value_real = false;
             _sync_interval--;
+        // Else notify observers
         } else {
             _last_value = real;
+            _last_value_real = true;
             Smart_Data<Transducer>::send(t, expiry);
-            _sync_interval = P_Traits::SYNC_INTERVAL;
+            _sync_interval = PT::SYNC_INTERVAL;
         }
 
         db<Predictive_Smart_Data>(INF) << "Predictive_Smart_Data::send():_last_value=" << _last_value << endl;
@@ -115,16 +132,17 @@ protected:
     }
     
 private:
-    typedef Traits<Predictive_Smart_Data<Transducer>> P_Traits;
-    typedef typename IF<(P_Traits::PREDICTOR == P_Traits::LINEAR), 
-                Linear_Predictor<Value>, MLP_Predictor<Value>>::Result P_Type;
+    // Predictor traits
+    typedef Traits<Predictive_Smart_Data<Transducer>> PT;
+    typedef typename IF<(PT::PREDICTOR == PT::LINEAR), Linear_Predictor<Value>, MLP_Predictor<Value>>::Result P_Type;
 
     Predictor<Value> * _predictor;
     float _acc_margin;
     Value _last_value;
-    unsigned int _sync_interval;
+    bool _last_value_real;
     bool _trusty;
-  
+    unsigned int _sync_interval;
+
 };
 
 __END_SYS

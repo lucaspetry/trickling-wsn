@@ -76,18 +76,19 @@ inline T pow(const T & x, unsigned int e)
         return x * pow(x * x, (e - 1) / 2);
 }
 
-inline double exp(float e)
+inline float exp(float e)
 {
-    double r = 1;
-    double fact = 1;
-    double pow = 1;
+    float r = 1;
+    float fact = 1;
+    float pow = 1;
 
     if(e == 0) return r;
     if(e == 1) return E;
 
     // Taylor Series Expansion of Exponential Function
-    for(double i = 1; i <= 50; i += 1) {
-        fact *= i; pow *= e;
+    for(float i = 1; i <= 50; i += 1) {
+        fact *= i;
+        pow *= e;
         r += pow / fact;
     }
 

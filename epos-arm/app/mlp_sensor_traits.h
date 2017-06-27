@@ -423,7 +423,7 @@ template <typename S> struct Traits<MLP_Predictor<S>>: public Traits<void>
     static const float HIDDEN_BIASES[HIDDEN_UNITS];
     static const float OUTPUT_WEIGHTS[HIDDEN_UNITS];
     static const float OUTPUT_BIAS;
-    static const bool NORMALIZATION = false;
+    static const bool NORMALIZATION = true;
     static const float NORMALIZATION_MIN;
     static const float NORMALIZATION_MAX;
 };

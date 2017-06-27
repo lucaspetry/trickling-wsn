@@ -5,7 +5,6 @@
 
 #include <predictor.h>
 #include <utility/math.h>
-#include <utility/ostream.h>
 
 __BEGIN_SYS
 
@@ -13,12 +12,13 @@ template<typename Type>
 class MLP_Predictor: public Predictor<Type>
 {
 public:
-    MLP_Predictor() {
-        for(unsigned int i = 0; i < PT::LAG_INPUTS; i++)
-            _lag_inputs[i] = 0.0;
+    MLP_Predictor() : _consecutive_reals(0) {
+        for(unsigned int i = 0; i < PT::LAG_INPUTS; i++) {
+            _last_values[i] = 0.0;
+        }
     }
     
-    Type predict_next(Type last_value) {
+    Type predict_next(Type last_value, bool is_real = false) {
         db<MLP_Predictor>(TRC) << "MLP_Predictor::predict_next(last_value=" << last_value << ")" << endl;
         
         // Add value and normalize if necessary
@@ -31,7 +31,7 @@ public:
 	    for(unsigned int i = 0; i < PT::HIDDEN_UNITS; i++) {
             float sum = PT::HIDDEN_BIASES[i];
             for(int j = 0; j < PT::LAG_INPUTS; j++) {
-                sum += _lag_inputs[j] * PT::HIDDEN_WEIGHTS[i * PT::LAG_INPUTS + j];
+                sum += _last_values[j] * PT::HIDDEN_WEIGHTS[i * PT::LAG_INPUTS + j];
             }
 	     	hidden_output[i] = hidden_activation_function(sum);
 	    }
@@ -45,15 +45,28 @@ public:
 
         // Denormalize, if necessary, and return prediction
         if(PT::NORMALIZATION) output = denormalize(output);
+
+        if(is_real) {
+            _consecutive_reals++;
+        } else {
+            _consecutive_reals = 0;
+        }
+
 	    return output;
     }
 
-private:
-    inline void add_last_value(Type last_value) {
-        for(unsigned int i = 1; i < PT::LAG_INPUTS; i++)
-            _lag_inputs[i - 1] = _lag_inputs[i];
+    // If all last values were read from sensor, then predictor is definitely reliable
+    bool reliable() {
+        return _consecutive_reals >= PT::LAG_INPUTS;
+    }
 
-        _lag_inputs[PT::LAG_INPUTS - 1] = last_value;
+private:
+    inline void add_last_value(float last_value) {
+        for(unsigned int i = 1; i < PT::LAG_INPUTS; i++) {
+            _last_values[i - 1] = _last_values[i];
+        }
+
+        _last_values[PT::LAG_INPUTS - 1] = last_value;
     }
 
     inline float normalize(float value) {
@@ -73,8 +86,11 @@ private:
 	}
 
 private:
+    // Predictor traits
     typedef Traits<MLP_Predictor<Type>> PT;
-    Type _lag_inputs[PT::LAG_INPUTS];
+
+    float _last_values[PT::LAG_INPUTS];
+    unsigned int _consecutive_reals;
     
 };
 

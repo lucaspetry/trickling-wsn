@@ -1,5 +1,4 @@
 #include <predictive_smart_data.h>
-#include <mlp_predictor.h>
 #include <utility/ostream.h>
 #include <alarm.h>
 
