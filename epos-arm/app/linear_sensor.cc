@@ -12,8 +12,8 @@ int main()
     cout << "\n\n\n========================   SENSOR START   =======================" << endl;
     cout << "[ SENSOR ]    Linear Predictor - Initializing..." << endl;
 
-    Stub_Sensor sensor;
-    Predictive_Smart_Data<Stub_Sensor> data(0, 100000000);
+    Stub_Temperature sensor;
+    Predictive_Smart_Data<Stub_Temperature> data(0, 100000000);
     cout << "[ SENSOR ]    Location at: " << data.location() << endl;
     cout << "\n\n\n" << endl;
   

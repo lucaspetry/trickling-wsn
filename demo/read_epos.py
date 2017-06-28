@@ -70,7 +70,7 @@ if __name__ == "__main__":
    
 	fig = plt.figure()
 	plt.ion()
-	plt.axis([1, 40, 0, 20])
+	plt.axis([1, 40, 0, 2000])
 	t = 0
 
 	x_arr = [0]

@@ -46,7 +46,7 @@ private:
         float b = _b;
         float m = _m;
 
-        for(int i = 0; i < GD_ITERATIONS; i++) {
+        for(int i = 0; i < PT::GD_ITERATIONS; i++) {
             float b_gradient = 0;
             float m_gradient = 0;
 

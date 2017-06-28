@@ -362,7 +362,7 @@ private:
     static RFID_Sensor * _dev[MAX_DEVICES];
 };
 
-class Stub_Sensor // TODO
+class Stub_Temperature // TODO
 {
 public:
     static const unsigned int UNIT = TSTP::Unit::Temperature;
@@ -380,14 +380,53 @@ public:
     typedef _UTIL::Observed Observed;
 
 public:
-    Stub_Sensor() {}
+    Stub_Temperature() {}
 
-    static void sense(unsigned int dev, Smart_Data<Stub_Sensor> * data) {
+    static void sense(unsigned int dev, Smart_Data<Stub_Temperature> * data) {
         data->_value = DATA[IDX % SIZE];
         IDX++;
     }
 
-    static void actuate(unsigned int dev, Smart_Data<Stub_Sensor> * data, const Smart_Data<Stub_Sensor>::Value & command) {}
+    static void actuate(unsigned int dev, Smart_Data<Stub_Temperature> * data, const Smart_Data<Stub_Temperature>::Value & command) {}
+
+    static void attach(Observer * obs) { _observed.attach(obs); }
+    static void detach(Observer * obs) { _observed.detach(obs); }
+
+private:
+    static bool notify() { return _observed.notify(); }
+
+    static void init();
+
+private:
+    static Observed _observed;
+};
+
+class Stub_Lighting // TODO
+{
+public:
+    static const unsigned int UNIT = TSTP::Unit::Luminous_Intensity;
+    static const unsigned int NUM = TSTP::Unit::I32;
+    static const int ERROR = 0; // Unknown
+
+    static const bool INTERRUPT = false;
+    static const bool POLLING = true;
+
+    static unsigned int IDX;
+    static const unsigned int SIZE;
+    static const float DATA[];
+
+    typedef _UTIL::Observer Observer;
+    typedef _UTIL::Observed Observed;
+
+public:
+    Stub_Lighting() {}
+
+    static void sense(unsigned int dev, Smart_Data<Stub_Lighting> * data) {
+        data->_value = DATA[IDX % SIZE];
+        IDX++;
+    }
+
+    static void actuate(unsigned int dev, Smart_Data<Stub_Lighting> * data, const Smart_Data<Stub_Lighting>::Value & command) {}
 
     static void attach(Observer * obs) { _observed.attach(obs); }
     static void detach(Observer * obs) { _observed.detach(obs); }

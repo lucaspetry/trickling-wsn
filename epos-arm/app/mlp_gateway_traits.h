@@ -418,7 +418,7 @@ template <typename S> struct Traits<MLP_Predictor<S>>: public Traits<void>
 {
     static const bool debugged = true;
     static const unsigned int HIDDEN_UNITS = 5;
-    static const unsigned int LAG_INPUTS = 3;
+    static const unsigned int LAG_INPUTS = 4;
     static const float HIDDEN_WEIGHTS[HIDDEN_UNITS*LAG_INPUTS];
     static const float HIDDEN_BIASES[HIDDEN_UNITS];
     static const float OUTPUT_WEIGHTS[HIDDEN_UNITS];
@@ -427,16 +427,16 @@ template <typename S> struct Traits<MLP_Predictor<S>>: public Traits<void>
     static const float NORMALIZATION_MIN;
     static const float NORMALIZATION_MAX;
 };
-template <typename S> const float Traits<MLP_Predictor<S>>::HIDDEN_WEIGHTS[] = {-0.61828678162946, -0.72405670280038,  4.66223842383100,
-                                                                                -2.25629386684104,  4.16138800108699,  0.96837151539833,
-                                                                                -1.14929932529931,  1.42080487252203,  4.37687735275928,
-                                                                                -2.22303524180525, -0.86430493495427, -4.06333035928021,
-                                                                                 3.03422058199185,  3.26105843183883, -1.58422262880005};
-template <typename S> const float Traits<MLP_Predictor<S>>::HIDDEN_BIASES[] = {4.83983182011767, 2.25770237433247, -0.267896160836834, -2.39151299799297, 4.83391715868682};
-template <typename S> const float Traits<MLP_Predictor<S>>::OUTPUT_WEIGHTS[] = {-0.412420967808636, 0.896218844051993, 0.664567894352862, -0.189001779575074, -0.521224580849148};
-template <typename S> const float Traits<MLP_Predictor<S>>::OUTPUT_BIAS = -0.144331309491435f;
-template <typename S> const float Traits<MLP_Predictor<S>>::NORMALIZATION_MIN = 1.7f;
-template <typename S> const float Traits<MLP_Predictor<S>>::NORMALIZATION_MAX = 33.9f;
+template <typename S> const float Traits<MLP_Predictor<S>>::HIDDEN_WEIGHTS[] = {1.856189880744175, -2.364044192323763, -2.015193948157803, -2.111389598306678,
+                                                                                2.452078535933905, -1.502047403453988, 2.858228661817955, -0.592074412290217,
+                                                                                -2.379480482473748, 0.050063969277013, 2.423120236133121, 2.233053371105561,
+                                                                                2.504129446209458, 2.777068627114355, -0.117111318654031, 1.770901264697802,
+                                                                                0.774307665838050, 2.677979856190503, 1.735792413082430, 2.647371994499392};
+template <typename S> const float Traits<MLP_Predictor<S>>::HIDDEN_BIASES[] = {-4.214431915868052, -2.173575154565063, -0.638939802192748, 2.059575481573106, 4.160726537029708};
+template <typename S> const float Traits<MLP_Predictor<S>>::OUTPUT_WEIGHTS[] = {-0.500381577509181, 0.505849042103031, 1.239191435875788, 0.230485145952991, 0.062830637852658};
+template <typename S> const float Traits<MLP_Predictor<S>>::OUTPUT_BIAS = -0.742589287808183f;
+template <typename S> const float Traits<MLP_Predictor<S>>::NORMALIZATION_MIN = 0.0f;
+template <typename S> const float Traits<MLP_Predictor<S>>::NORMALIZATION_MAX = 2025.0f;
 
 template<> struct Traits<IP>: public Traits<Network>
 {

@@ -19,7 +19,7 @@ int main()
     TSTP::Region region_temp(TSTP::Coordinates(1, 1, 1), 10, start, end);
 
     // Data of interest
-    Predictive_Smart_Data<Stub_Sensor> data(region_temp, DATA_PERIOD);
+    Predictive_Smart_Data<Stub_Lighting> data(region_temp, DATA_PERIOD);
     cout << "[ GATEWAY ]    Location at: " << data.location() << endl;
     cout << "[ GATEWAY ]    Interest:    " << region_temp << endl;
     cout << "\n\n" << endl;
