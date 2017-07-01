@@ -66,9 +66,6 @@ public:
     if(_isNormalized) lastValue = normalize(lastValue);
     addLastValue(lastValue);
 
-  	// multiplica a entrada pelos pesos de entrada e soma com o bias
-  	// para cada um dos N neuronios intermediarios
-  	// e passa pela função de ativação
     float outputHiddenLayer[HIDDEN_UNITS];
     for(int i = 0; i < HIDDEN_UNITS; i++) {
       float sum = _biasInput[i];
@@ -79,7 +76,6 @@ public:
      	outputHiddenLayer[i] = activationFunction(sum);
     }
 
-    //multiplica e soma os valores no nodo de saida
     float sumOutputLayer = _biasHidden;
     for(int i = 0; i < HIDDEN_UNITS; i++) {
       sumOutputLayer += outputHiddenLayer[i] * _wHiddenLayer[i];

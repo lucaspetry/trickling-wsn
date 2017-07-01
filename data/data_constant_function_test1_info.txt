@@ -1,0 +1,16 @@
+./linear -in data/data3.dat -out data/data3_results.txt -margin 0.05 -window 1 -lrate 0.000001 -i 30000 -m 0 -b 0
+
+Test Parameters:
+> Input File:        data/data3.dat
+> Output File:       data/data3_results.txt
+> Acceptance Margin: 0.05
+> Window Size:       1
+> Learning Rate:     1e-06
+> GD Iterations:     30000
+> Initial m:         0
+> Initial b:         0
+
+Running predictor... DONE!
+
+Predictor Hits: 86.2% (862/1000)
+

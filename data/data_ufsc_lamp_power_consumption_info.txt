@@ -1,0 +1,10 @@
+========================================================================
+Data Information
+========================================================================
+What:		Lamp Power Consumption
+Unit:		
+Where:		UFSC Solar Smart Building (Sapiens Park)
+When:		
+Source:		UFSC IoT Gateway
+		(Federal University of Santa Catarina)
+URL:		http://iot.ufsc.br/
