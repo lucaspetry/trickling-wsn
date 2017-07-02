@@ -2,7 +2,7 @@
 
 Project developed during the course INE5424 Operating Systems II at Federal University of Santa Catarina. The objective was to implement predictors on embedded systems for trickling in Wireless Sensor Networks (WSN).
 
-- Check out our final presentation [here](https://github.com/lucaspetry/trickling-wsn/blob/master/demo/Presentation.pdf).
+- Check out our final presentation [here](https://github.com/lucaspetry/trickling-wsn/blob/master/demo/presentation.pdf).
 - Check out the final report [here](https://github.com/lucaspetry/trickling-wsn/blob/master/report/final_report.md).
 
 ## Authors
